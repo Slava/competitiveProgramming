@@ -1,0 +1,16 @@
+<html>
+<head>
+<script type="text/javascript">
+    var ws = new WebSocket("ws://localhost:8888/update");
+    ws.onopen = function() {
+       // ws.send("Hello, world");
+    };
+    ws.onmessage = function (evt) {
+        document.getElementById('mainblock').innerHTML = evt.data;
+    };
+</script>
+</head>
+<body>
+    <div id = "mainblock"></div>
+</body>
+</html>

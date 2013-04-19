@@ -1,0 +1,79 @@
+
+contest_time = 300
+score_system = acm
+standings_locale = "ru"
+
+compile_dir = "../../compile/var/compile"
+
+team_enable_src_view
+team_enable_rep_view
+problem_navigation
+
+
+compile_max_vm_size = 256M
+compile_max_file_size = 32M
+
+
+stand_fancy_style
+
+cr_serialization_key = 22723
+detect_violations
+advanced_layout
+enable_l10n
+team_download_time = 0
+cpu_bogomips = 3192
+
+[language]
+id = 1
+short_name = "fpc"
+long_name = "Free Pascal 2.4.0-2ubuntu1.10.10"
+src_sfx = ".pas"
+
+[language]
+id = 2
+short_name = "gcc"
+long_name = "GNU C 4.4.5"
+src_sfx = ".c"
+
+[language]
+id = 3
+short_name = "g++"
+long_name = "GNU C++ 4.4.5"
+src_sfx = ".cpp"
+
+[language]
+id = 13
+short_name = "python"
+long_name = "Python 2.6.6"
+arch = "linux-shared"
+src_sfx = ".py"
+
+[language]
+id = 14
+short_name = "perl"
+long_name = "Perl 5.10.1"
+arch = "linux-shared"
+src_sfx = ".pl"
+
+[language]
+id = 18
+short_name = "javac"
+long_name = "Java JDK 1.6.0_25"
+arch = "java"
+src_sfx = ".java"
+exe_sfx = ".jar"
+
+[language]
+id = 23
+short_name = "python3"
+long_name = "Python3 3.1.2"
+arch = "linux-shared"
+src_sfx = ".py"
+
+[language]
+id = 25
+short_name = "make"
+long_name = "Generic build generic"
+arch = "linux-shared"
+src_sfx = ".tar"
+
