@@ -1,0 +1,17 @@
+#include <iostream>
+#include <deque>
+using namespace std;
+
+int main ()
+{
+  deque<int> mydeque (2,100);     // two ints with a value of 100
+  mydeque.push_front (200);
+  mydeque.push_front (300);
+
+  cout << "mydeque contains:";
+  for (unsigned i=0; i<mydeque.size(); ++i)
+    cout << " " << mydeque[i];
+
+  cout << endl;
+  return 0;
+}

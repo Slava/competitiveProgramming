@@ -1,0 +1,1 @@
+for %%i in (01,02,03,04) do call test %1 %%i

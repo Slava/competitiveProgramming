@@ -1,0 +1,44 @@
+var y5_sLinkHead = 'http://an.yandex.ru/count/LxQ_Dd3_Se840000ZhIKyRW4XP8n2vQZRx26aRaS9UmCau8AU0C0';
+var y5_iDirectCounter = 0;
+var y5_iDirectAdsCounter = 0;
+
+function yandex_direct_print() {
+ if (window.y5_isTransform)
+  y5_getYandexDirect();
+}
+
+function y5_getYandexDirect() {
+ var aAds = [  ['<div class="ad-link"><a href="http://an.yandex.ru/count/LxQ_Diwsa3i40000ZhIKyRW4XP8n2vK2cm5kGoi1YAdCxGY9aUj3c4ITh6Dy19QZRx26agQfa0kAhC6G1v6v72Ni38-ymlqU29-u7gDL0vE22fapYw4wS3L2Z91n0g2GSG9-2W00" target="_blank">Экономим на строительстве</a></div><div>и ремонте дома. Советы, фото, примеры.</div> <span class="url">www.ekonomdom.com</span>','=1LOG6PK2cm5kGucHwqEOH9AcgP0BdQnZV0IFlCBz7WYVk1wZLGEPCw2GSG91UGK0'],
+  ['<div class="ad-link"><a href="http://an.yandex.ru/count/LxQ_DjbBeDG40000ZhIKyRW4XP8n2vK2cm5kGoi1CeYZkJW7YQ88HGQOH9sMNXASftWxAPQZRx26cfXlnPAWR3m9Ygduy0MHkHmbx0oJWWgP0ekfAOWeGeoGSGAWa742V0e0" target="_blank">100$ в день сидя дома - реально!</a></div><div>Мы научим Вас зарабатывать реальные деньги в интернете! Это Ваш шанс!</div> <span class="url">magrussian.intway.info</span>','=8QHQLvK2cm5kGpA9eWX51fX4dATuEocQc6_5ag1iF0cTbbuIcGAWa742GNy4'],
+  ['<div class="ad-link"><a href="http://an.yandex.ru/count/LxQ_DW5I3PC40000ZhIKyRW4XP8n2vK2cm5kGoi1CuYax049YQhgHn2OH9sNwOkSftWxAPQZRx26cfUfu9AZeAeBYgUKeWUHkHmbx0oJWWgPQOkX30CsGeoGSGAWa742V0e0" target="_blank">Бизнес XXI века. В день от 100$</a></div><div>Реальный заработок в интернете, постоянный доход, деньги</div> <span class="url">kasandra2409.1intway.com</span>','=LvjBN9K2cm5kGpE9gkf749X4dATuEocQbwdWagEWgWkTb-cBcMcWa742GNy4'],
+  ['<div class="ad-link"><a href="http://an.yandex.ru/count/LxQ_DfT-RjC40000ZhIKyRW4XP8n2vK2cm5kGoi1D8YjLsW7YQoEo1MOH9shiU01dATuEocMes-mXfgNgU2Igig12Oggvo06aRaS9UmCau8AcMcBhKBRAKACa742e91n0dqA" target="_blank">Какой бизнес начать?</a></div><div>Не знаешь? Тогда попробуй вот этот...</div> <span class="url">tkoval.intwaybiz.com</span>','=1SNj8fK2cm5kGpI9h8x85PX4dATuEocQbwdWaghAWGcTgx7W0Pbfe91n0a5u1G00'] ];
+ var aLinkHow = ['<a target="_blank" href="http://an.yandex.ru/count/LxQ_DgUXJWG40000ZhIKyRW4XP8n2vK2cmHhK2i1DOYkheG5bgDli8QQXzQIfe9s2OgYwXW6aRaS9UmCau8AYwTZeob2UGS0">Дать объявление</a>','=-biO39K2cmHhK3MQXzQIfe9s2K5u0W00'];
+ var aLinkAll = [];
+ var sLinkDirectText = '<em>Я</em>ндекс.Директ';
+ var sLinkDirectUrl = 'http://direct.yandex.ru/?partner';
+ var aDomainList = ['acmp.ru'];
+
+ y5_iDirectCounter++;
+ y5_showYandexDirect(aAds, sLinkDirectText, sLinkDirectUrl, aLinkHow, aLinkAll, aDomainList);
+}
+
+function y5_getYandexMarket() {}
+
+function y5_defAdFormat() {
+ var aFormats = ['direct', 'market', 'media', 'compatibility'];
+ var sAdFormat = (window.yandex_ad_format) ? y5_checkEntry(yandex_ad_format.toString(), aFormats) : aFormats[0];
+ switch (sAdFormat) {
+  case aFormats[0]:
+   y5_getYandexDirect();
+   break;
+  case aFormats[1]:
+   y5_getYandexMarket();
+   break;
+  case aFormats[2]:
+   y5_getMediaBanner();
+   break;
+  case aFormats[3]:
+   break;
+ }
+}
+y5_defAdFormat();

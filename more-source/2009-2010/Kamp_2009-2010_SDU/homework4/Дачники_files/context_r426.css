@@ -1,0 +1,220 @@
+/*****************************************************************************
+    COMMON
+*****************************************************************************/
+.y5 * { background: none !important; border: none !important; clear: none !important; clip: auto !important; cursor: auto !important; float: none !important; font-size: 100% !important; font-style: normal !important; font-variant: normal !important; font-weight: normal !important; height: auto !important; letter-spacing: normal !important; line-height: normal !important; margin: 0 !important; overflow: visible !important; padding: 0 !important; position: static !important; text-align: left !important; text-decoration: none !important; text-indent: 0 !important; text-transform: none !important; vertical-align: baseline !important; visibility: visible !important; white-space: normal !important; width: auto !important; word-spacing: normal !important; z-index: auto !important; }
+
+.y5 a, .y5 a * { cursor: pointer !important; text-decoration: underline !important; }
+.y5 b { font-weight: bold !important; }
+
+.y5 a, .y5 b, .y5 em, .y5 ins, .y5 span { display: inline !important; }
+.y5 div, .y5 img, .y5 object , .y5 embed { display: block !important; }
+
+.y5 table { border-collapse: collapse !important; display: table !important; table-layout: auto !important; width: 100% !important; }
+.y5 tbody { display: table-row-group !important; }
+.y5 tr { display: table-row !important; }
+.y5 th, .y5 td { display: table-cell !important; vertical-align: top !important; }
+
+.y5 ul, .y5 li { display: list-item !important; list-style: none outside none !important; }
+.y5 wbr { display: inline-block !important; }
+
+.y5 .y5_ya em { color: red !important; }
+.y5 .y5_black, .y5 .y5_black a { color: black !important; }
+.y5 .y5_white, .y5 .y5_white a { color: white !important; }
+.y5 .y5_all a, .y5 .y5_how a { white-space: nowrap !important; }
+.y5 .y5_ads * { line-height: 1.2em !important; }
+
+
+/*****************************************************************************
+    ICON
+*****************************************************************************/
+.y5_nf .y5_ad span, .y5_nf .y5_ad span a, .y5_nf .y5_icon { left: 0 !important; top: 0 !important; }
+.y5_nf .y5_ad span, .y5_nf .y5_ad span a { position: relative !important; }
+.y5_nf .y5_ad span a { padding-left: 16px !important; }
+
+.y5_nf .y5_icon { height: 16px !important; width: 16px !important; }
+.y5_nf .y5_icon, .y5_nf .y5_icon em { position: absolute !important; }
+.y5_nf .y5_icon em {height: 1px !important; overflow: hidden !important;}
+
+.y5_f .y5_ads .y5_ad .y5_icon { display: none !important; }
+
+
+/*****************************************************************************
+    NOT FIXED
+    vertical, horizontal, flat
+*****************************************************************************/
+* html .y5_nf { height: 1% !important; }
+* html .y5_nf, * html .y5_nf * { left: 0 !important; position: relative !important; top: 0 !important; }
+
+/* header */
+.y5_nf .y5_h div { padding: 0.25em 0 !important; }
+.y5_nf .y5_h span { padding: 0.25em 0.5em !important; }
+
+.y5_vertical .y5_h2 { padding-bottom: 0.3em !important; }
+.y5_vertical .y5_h2 div { margin: 0 0 0.2em 0.5em !important; }
+
+.y5_flat .y5_h, .y5_horizontal .y5_h, .y5_auto .y5_h { overflow: hidden !important; width: 100% !important; }
+.y5_flat .y5_ya, .y5_horizontal .y5_ya, .y5_auto .y5_ya, .y5_auto .y5_how { float: left !important; }
+.y5_flat .y5_how, .y5_horizontal .y5_how, .y5_auto .y5_x,
+.y5_flat .y5_all, .y5_horizontal .y5_all, .y5_auto .y5_all { float: right !important; }
+
+.y5_auto .y5_h a, .y5_auto .y5_h u { font-size: 90% !important; }
+.y5_auto .y5_ads .ad-link a { font-size: 110% !important; }
+
+.y5_auto .y5_h div { padding: 0.25em 0.5em !important; }
+.y5_auto .y5_h span { padding: 0 !important; }
+
+/* favicon */
+.y5_nf .y5_ads .ad-link img, .y5_f .y5_ads .ad-link img { display: inline !important; margin-right: 4px !important; position: absolute !important; vertical-align: top !important; visibility: hidden !important; }
+.y5_nf .y5_ads .ad-link .y5_favicon, .y5_f .y5_ads .ad-link .y5_favicon { position: static !important; visibility: visible !important; }
+
+/* favicon, fix for ie7 */
+.y5_nf .y5_ads .ad-link img.y5_favicon, .y5_f .y5_ads .ad-link img.y5_favicon,
+.y5_nf .y5_ads .ad-link img.y5_favicon1x1, .y5_f .y5_ads .ad-link img.y5_favicon1x1 { behavior: 0 ! important; }
+/*.y5_f .y5_ads .y5_ad .y5_favicon { display: none !important; }*/
+
+/* close */
+.y5_auto .y5_x span u { background-position: 100% 50% !important; background-repeat: no-repeat !important; cursor: pointer !important; padding-right: 16px !important; position: static !important; text-decoration: underline !important; }
+
+/* ads */
+.y5_nf .y5_ads .y5_ad { padding: 0.5em !important; }
+.y5_nf .y5_ads .ad-link, .y5_nf .y5_ads .y5_title { font-size: 110% !important; }
+.y5_nf .y5_ads .ad-link a, .y5_nf .y5_ads .y5_title a { font-weight: bold !important; }
+.y5_nf .y5_ads .y5_ad span { display: block !important; }
+
+.y5_vertical .y5_ads .ad-link, .y5_vertical .y5_ads .y5_title,
+.y5_horizontal .y5_ads .ad-link, .y5_horizontal .y5_ads .y5_title { margin-bottom: 0.2em !important; }
+.y5_horizontal .y5_nbsp div { width: 0.5em !important; }
+.y5_flat .y5_ads .ad-link { margin-right: 0.5em !important; }
+.y5_flat .y5_ads .y5_ad div { display: inline !important; }
+
+/* ads count */
+.y5_horizontal .y5_ads1 .y5_item, .y5_auto .y5_ads1 .y5_item { width: 100% !important; }
+.y5_horizontal .y5_ads2 .y5_item, .y5_auto .y5_ads2 .y5_item { width: 50% !important; }
+.y5_horizontal .y5_ads3 .y5_item, .y5_auto .y5_ads3 .y5_item { width: 33% !important; }
+.y5_horizontal .y5_ads4 .y5_item { width: 25% !important; }
+
+/* border types */
+.y5_vertical .y5_ba .y5_item,
+.y5_flat .y5_ba .y5_item { margin-bottom: 0.5em !important; }
+
+.y5_vertical .y5_ba .y5_item, .y5_vertical .y5_bb .y5_ads, .y5_vertical .y5_bb .y5_h2,
+.y5_flat .y5_ba .y5_item, .y5_flat .y5_bb .y5_ads,
+.y5_horizontal .y5_ba .y5_item, .y5_horizontal .y5_bb .y5_ads,
+.y5_auto { border-style: none !important; border-width: 1px !important; }
+
+.y5_vertical .y5_bb .y5_ads { border-bottom-width: 0 !important; }
+.y5_vertical .y5_bb .y5_h2 { border-top-width: 0 !important; }
+
+
+/*****************************************************************************
+    FIXED
+    vertical: 160x600, 240x400, 120x600, 200x300, 120x240
+    square: 300x300, 300x250, 250x250, 180x150, 125x125
+    horizontal: 728x90, 600x60, 468x60, 234x60
+*****************************************************************************/
+.y5_f { border-style: none !important; border-width: 1px !important; left: 0 !important; overflow: hidden !important; position: relative !important; top: 0 !important; }
+
+.y5_f * { font-family: arial, sans-serif !important; }
+
+/* header & ads */
+.y5_f .y5_h,
+.y5_f .y5_ads { overflow: hidden !important; }
+
+.y5_f .y5_h div { font-size: 11px !important; }
+.y5_f .y5_h span { margin: 0 5px !important; }
+.y5_f .y5_h a { line-height: 18px !important; }
+
+.y5_f .y5_ads .y5_ad { padding: 2px 5px 5px !important; }
+.y5_f .y5_ads .ad-link { margin-bottom: 0.2em !important; }
+.y5_f .y5_ads .ad-link a { font-weight: bold !important; }
+
+.y5_f .y5_h span, .y5_f .y5_ads .y5_ad span { display: block !important; }
+
+/* font sizes */
+.y5_s1 .y5_ads { font-size: 11px !important; }
+.y5_s1 .ad-link,
+
+.y5_s2 .y5_ads { font-size: 12px !important; }
+.y5_s2 .ad-link,
+
+.y5_s3 .y5_ads { font-size: 14px !important; }
+.y5_s3 .ad-link,
+
+.y5_s4 .y5_ads { font-size: 16px !important; }
+.y5_s4 .ad-link { font-size: 18px !important; }
+
+/* ads count */
+.y5_dv .y5_item { display: block !important; }
+.y5_dv .y5_item,
+.y5_dh .y5_ads1 .y5_item { width: 100% !important; }
+
+.y5_dh .y5_item { display: inline !important; float: left !important; height: 100% !important; overflow: hidden !important; }
+.y5_dh .y5_ads2 .y5_item { width: 50% !important; }
+.y5_dh .y5_ads3 .y5_item { width: 33% !important; }
+
+/* header position */
+.y5_ht .y5_h, .y5_hb .y5_h, .y5_htb .y5_h { width: 100% !important; }
+.y5_hr .y5_h, .y5_hl .y5_h { height: 100% !important; width: 100px !important; }
+.y5_htb .y5_h, .y5_htr .y5_h { height: 18px !important; }
+
+.y5_hr .y5_h, .y5_hr .y5_ads,
+.y5_hl .y5_h, .y5_hl .y5_ads,
+.y5_htr .y5_ads { position: absolute !important; top: 0 !important; }
+
+.y5_hr .y5_h, .y5_hl .y5_ads { right: 0 !important; }
+.y5_hl .y5_h, .y5_hr .y5_ads, .y5_htr .y5_ads { left: 0 !important; }
+
+.y5_htr .y5_h { float: right !important; }
+
+/* header layout */
+.y5_dv .y5_ht .y5_h, .y5_dv .y5_hb .y5_h { height: 36px !important; }
+
+.y5_dh .y5_ht .y5_h, .y5_dh .y5_hb .y5_h { height: 18px !important; }
+.y5_dh .y5_ht .y5_ya, .y5_dh .y5_hb .y5_ya { float: left !important; }
+.y5_dh .y5_ht .y5_all, .y5_dh .y5_hb .y5_all { float: right !important; }
+
+.y5_dh .y5_ht .y5_how span, .y5_dh .y5_hb .y5_how span { text-align: center !important; }
+
+.y5_dh .y5_hr .y5_all, .y5_dh .y5_hl .y5_all { bottom: 0 !important; left: auto !important; position: absolute !important; }
+
+/* header compact */
+.y5_hc .y5_ht .y5_h, .y5_hc .y5_hb .y5_h { height: 18px !important; }
+.y5_hc .y5_ht .y5_ya, .y5_hc .y5_hb .y5_ya { float: left !important; }
+.y5_hc .y5_ht .y5_all, .y5_hc .y5_hb .y5_all { float: right !important; }
+
+/* customize */
+.y5_120x240 .y5_all, .y5_120x240 .y5_ads .y5_ad span,
+.y5_125x125 .y5_all, .y5_125x125 .y5_ads .y5_ad span,
+.y5_234x60 .y5_all, .y5_234x60 .y5_ads .y5_ad span { display: none !important; }
+
+.y5_120x240 .y5_ht .y5_h, .y5_120x240 .y5_hb .y5_h,
+.y5_125x125 .y5_ht .y5_h, .y5_125x125 .y5_hb .y5_h { height: 18px !important; }
+
+.y5_600x60 .y5_ht .y5_ad div, .y5_600x60 .y5_hb .y5_ad div,
+.y5_468x60 .y5_ht .y5_ad div, .y5_468x60 .y5_hb .y5_ad div { display: inline !important; }
+
+.y5_600x60 .y5_ht .ad-link, .y5_600x60 .y5_hb .ad-link,
+.y5_468x60 .y5_ht .ad-link, .y5_468x60 .y5_hb .ad-link { margin-right: 0.5em !important; }
+
+.y5_234x60 .y5_ads .ad-link { padding-right: 90px !important; }
+
+
+/*****************************************************************************
+    MEDIA BANNER
+	200x300, 240x400
+*****************************************************************************/
+.y5_b200x300 { width: 200px !important; }
+.y5_b240x400 { width: 240px !important; }
+
+.y5_b200x300 object, .y5_b200x300 embed, .y5_b200x300 img { height: 300px !important; width: 200px !important; }
+.y5_b240x400 object, .y5_b240x400 embed, .y5_b240x400 img { height: 400px !important; width: 240px !important; }
+
+.y5_b2x240x400 object, .y5_b2x240x400 embed, .y5_b2x240x400 img { height: 270px !important; width: 240px !important; }
+.y5_b2x240x400 .y5_second object, .y5_b2x240x400 .y5_second embed, .y5_b2x240x400 .y5_second img { height: 130px !important; width: 240px !important; }
+.y5_b2x240x400 .y5_1x1 {position:absolute ! important;}
+
+.y5_b2x200x300 object, .y5_b2x200x300 embed, .y5_b2x200x300 img { height: 200px !important; width: 200px !important; }
+.y5_b2x200x300 .y5_second object, .y5_b2x200x300 .y5_second embed, .y5_b2x200x300 .y5_second img { height: 100px !important; width: 200px !important; }
+.y5_b2x200x300 .y5_1x1 {position:absolute ! important;}
+
+.y5_banner img.y5_1x1 { height: 1px !important; width: 1px !important; }

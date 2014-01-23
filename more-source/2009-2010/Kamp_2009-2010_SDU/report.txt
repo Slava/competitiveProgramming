@@ -1,0 +1,57 @@
+1 day
+OR, AND, NOT, XOR
+HEAP, MAP, LIST, SET
+RMQ, RSQ
+
+HW of 1 day
+XOR
+RSQ
+
+2 day
+Geometry exam
+
+HW of 2 day
+Geometry
+
+3 day
+Started DP
+
+HW of 3 day
+Dp
+
+Contest of 3 day
+Geometry
+
+Evening of 3 day
+Geometry
+
+4 day
+Quiz Geometry
+
+HW of 4 day
+Geometry
+
+5 day
+no contest
+
+6 day
+contest geometry
+
+6 day evening
+coci contest
+
+7 day
+Problem about chess
+
+coci contest re-solving
+
+HW of 7 day
+dynamic
+
+Evening of 7 day
+Bit masks
+Tries
+Prefix function
+
+8 day
+contest

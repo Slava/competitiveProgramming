@@ -1,0 +1,30 @@
+Cities in Alberta tend to be laid out as rectangular grids of blocks. Blocks are labeled with coordinates 0 to R-1 from north to south and 0 to C-1 from west to east.
+
+The quality of living in each particular block has been ranked by a distinct number, called quality rank, between 1 and R*C, where 1 is the best and R*C is the worst.
+
+The city planning department wishes to identify a rectangular set of blocks with dimensions H from north to south and W from west to east, such that the median quality rank among all blocks in the rectangle is the best. H and W are odd numbers not exceeding R and C respectively. The median quality rank among an odd number of quality ranks is defined to be the quality rank m in the set such that the number of quality ranks better than m equals the number of quality ranks worse than m. 
+
+Input ("input.txt")
+As an input you are given R,C,H,W and Q (Q is an array such that Q[i][j] is the quality rank for the block labeled i from north to south and j from west to east).(R,C <= 3000, H<=R, W<=C). 
+
+Output ("output.txt")
+Your program must output a number: the best (numerically smallest) possible median quality rank of an H by W rectangle of blocks.
+
+Example 1:    
+  5 5 3 3 
+  
+  5 11 12 16 25
+ 17 18  2  7 10
+  4 23 20  3  1
+ 24 21 19 14  9
+  6 22  8 13 15
+Answer:
+9
+
+Example 2:
+  2 6 1 5 
+  6  1  2 11  7  5
+  9  3  4 10 12  8
+Answer:
+5
+

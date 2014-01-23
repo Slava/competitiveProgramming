@@ -1,0 +1,14 @@
+/* tan example */
+#include <stdio.h>
+#include <math.h>
+
+#define PI 3.14159265
+
+int main ()
+{
+  double param, result;
+  param = 45.0;
+  result = tan (param*PI/180);
+  printf ("The tangent of %lf degrees is %lf.\n", param, result );
+  return 0;
+}

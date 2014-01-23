@@ -1,0 +1,11 @@
+p.olimp { text-align: center; font-family: monospace; } 
+
+table.olimp { font-family: monospace; font-size: 14 } 
+td.olimp { text-align: center; font-weight: bold; } 
+td.right { text-align: right; font-weight: bold; } 
+td.left { text-align: left; font-weight: bold; } 
+
+b.red { color: red; font-family: monospace; } 
+b.green { color: green; font-family: monospace; } 
+b.blue { color: #0963C0; font-family: monospace; } 
+s.time { font-size: 10; font-style: normal; text-decoration: none; font-weight: bold; }

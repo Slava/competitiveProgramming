@@ -1,0 +1,7 @@
+2) http://www.spoj.pl/problems/HAMSTER1/
+
+3) http://www.spoj.pl/problems/FACVSPOW/
+
+4) USACO GOLD Division 1st task (Try to solve it not looking at analysis and solution)
+
+Solve these tasks and submit the solutions to the online judge.

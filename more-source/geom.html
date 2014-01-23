@@ -1,0 +1,985 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>~/Dropbox/[C++]/geom.h.html</title>
+<meta name="Generator" content="Vim/7.3">
+<meta name="plugin-version" content="vim7.3_v6">
+<meta name="syntax" content="cpp">
+<meta name="settings" content="use_css,number_lines">
+<style type="text/css">
+<!--
+pre { font-family: monospace; color: #b6b6b6; background-color: #212121; }
+body { font-family: monospace; color: #b6b6b6; background-color: #212121; }
+.lnr { color: #424242; }
+.Boolean { color: #cf6a4c; }
+.Number { color: #cf6a4c; }
+.Float { color: #cf6a4c; }
+.Comment { color: #424242; font-style: italic; }
+.Type { color: #9b859d; }
+.Statement { color: #cda869; }
+.String { color: #8f9d6a; }
+.PreProc { color: #7587a6; }
+-->
+</style>
+</head>
+<body>
+<pre>
+<span class="lnr">  1 </span><span class="PreProc">#include </span><span class="String">&lt;iostream&gt;</span>
+<span class="lnr">  2 </span><span class="PreProc">#include </span><span class="String">&lt;cmath&gt;</span>
+<span class="lnr">  3 </span><span class="PreProc">#include </span><span class="String">&lt;list&gt;</span>
+<span class="lnr">  4 </span><span class="PreProc">#include </span><span class="String">&lt;vector&gt;</span>
+<span class="lnr">  5 </span><span class="PreProc">#include </span><span class="String">&lt;algorithm&gt;</span>
+<span class="lnr">  6 </span><span class="Statement">using</span> <span class="Type">namespace</span> std;
+<span class="lnr">  7 </span>
+<span class="lnr">  8 </span><span class="Comment">// Алгоритмы для работы с вычислительной геометрией</span>
+<span class="lnr">  9 </span>
+<span class="lnr"> 10 </span><span class="Type">const</span> <span class="Type">double</span> eps = <span class="Float">1e-8</span>;
+<span class="lnr"> 11 </span><span class="Type">const</span> <span class="Type">double</span> pi = <span class="Float">3.14159265358979323</span>;
+<span class="lnr"> 12 </span><span class="Comment">// наибольший общий делитель двух чисел</span>
+<span class="lnr"> 13 </span><span class="Type">long</span> <span class="Type">long</span> gcd (<span class="Type">long</span> <span class="Type">long</span> a, <span class="Type">long</span> <span class="Type">long</span> b)
+<span class="lnr"> 14 </span>{
+<span class="lnr"> 15 </span>    a = (a &lt; <span class="Number">0</span> ? - a : a);
+<span class="lnr"> 16 </span>    b = (b &lt; <span class="Number">0</span> ? - b : b);
+<span class="lnr"> 17 </span>    <span class="Statement">while</span> (a &amp;&amp; b)
+<span class="lnr"> 18 </span>        <span class="Statement">if</span> (a &gt; b) a %= b;
+<span class="lnr"> 19 </span>        <span class="Statement">else</span> b %= a;
+<span class="lnr"> 20 </span>    <span class="Statement">return</span> a + b;
+<span class="lnr"> 21 </span>}
+<span class="lnr"> 22 </span>
+<span class="lnr"> 23 </span><span class="Comment">//*********************** Структуры данных ************************************</span>
+<span class="lnr"> 24 </span><span class="Comment">// Точка</span>
+<span class="lnr"> 25 </span><span class="Type">class</span> point
+<span class="lnr"> 26 </span>{
+<span class="lnr"> 27 </span><span class="Statement">public</span>:
+<span class="lnr"> 28 </span>    <span class="Type">double</span> x, y;
+<span class="lnr"> 29 </span>    <span class="Comment">// дополнительный параметр - индекс точки</span>
+<span class="lnr"> 30 </span>    <span class="Type">int</span> i;
+<span class="lnr"> 31 </span>    <span class="Comment">// Создание точки (_x, _y)</span>
+<span class="lnr"> 32 </span>    point(<span class="Type">double</span> _x, <span class="Type">double</span> _y)
+<span class="lnr"> 33 </span>    {
+<span class="lnr"> 34 </span>        x = _x;
+<span class="lnr"> 35 </span>        y = _y;
+<span class="lnr"> 36 </span>    }
+<span class="lnr"> 37 </span>    <span class="Comment">// Создание точки (0, 0)</span>
+<span class="lnr"> 38 </span>    point()
+<span class="lnr"> 39 </span>    {
+<span class="lnr"> 40 </span>        point(<span class="Number">0</span>, <span class="Number">0</span>);
+<span class="lnr"> 41 </span>    }
+<span class="lnr"> 42 </span>};
+<span class="lnr"> 43 </span>
+<span class="lnr"> 44 </span><span class="Comment">// Прямая</span>
+<span class="lnr"> 45 </span><span class="Type">class</span> line
+<span class="lnr"> 46 </span>{
+<span class="lnr"> 47 </span><span class="Statement">public</span>:
+<span class="lnr"> 48 </span>    <span class="Type">double</span> a, b, c;
+<span class="lnr"> 49 </span>    <span class="Comment">// Создание прямой ax + by + c = 0</span>
+<span class="lnr"> 50 </span>    line(<span class="Type">double</span> _a = <span class="Number">0</span>, <span class="Type">double</span> _b = <span class="Number">0</span>, <span class="Type">double</span> _c = <span class="Number">0</span>)
+<span class="lnr"> 51 </span>    {
+<span class="lnr"> 52 </span>        a = _a;
+<span class="lnr"> 53 </span>        b = _b;
+<span class="lnr"> 54 </span>        c = _c;
+<span class="lnr"> 55 </span>    }
+<span class="lnr"> 56 </span>};
+<span class="lnr"> 57 </span><span class="Type">class</span> circle
+<span class="lnr"> 58 </span>{
+<span class="lnr"> 59 </span><span class="Statement">public</span>:
+<span class="lnr"> 60 </span>    point c;
+<span class="lnr"> 61 </span>    <span class="Type">double</span> r;
+<span class="lnr"> 62 </span>    <span class="Comment">// Дополнительные данные</span>
+<span class="lnr"> 63 </span>    <span class="Type">double</span> alpha;
+<span class="lnr"> 64 </span>
+<span class="lnr"> 65 </span>    <span class="Comment">// Создание окружности с центром (x, y) и радиусом _r</span>
+<span class="lnr"> 66 </span>    circle (<span class="Type">double</span> x, <span class="Type">double</span> y, <span class="Type">double</span> _r)
+<span class="lnr"> 67 </span>    {
+<span class="lnr"> 68 </span>       c = point(x, y);
+<span class="lnr"> 69 </span>       r = _r;
+<span class="lnr"> 70 </span>    }
+<span class="lnr"> 71 </span>    <span class="Comment">// Создание окружности с центром p и радиусом _r</span>
+<span class="lnr"> 72 </span>    circle (point p, <span class="Type">double</span> _r)
+<span class="lnr"> 73 </span>    {
+<span class="lnr"> 74 </span>        c = p;
+<span class="lnr"> 75 </span>        r = _r;
+<span class="lnr"> 76 </span>    }
+<span class="lnr"> 77 </span>    circle ()
+<span class="lnr"> 78 </span>    {
+<span class="lnr"> 79 </span>       circle(<span class="Number">0</span>, <span class="Number">0</span>, <span class="Number">0</span>);
+<span class="lnr"> 80 </span>    }
+<span class="lnr"> 81 </span>};
+<span class="lnr"> 82 </span><span class="Comment">// сравнение двух точек по принципу самая нижняя из самых левых</span>
+<span class="lnr"> 83 </span><span class="Type">class</span> less_of_posXY
+<span class="lnr"> 84 </span>{
+<span class="lnr"> 85 </span><span class="Statement">public</span> :
+<span class="lnr"> 86 </span>    <span class="Type">bool</span> <span class="Statement">operator</span> () (point a, point b)
+<span class="lnr"> 87 </span>    {
+<span class="lnr"> 88 </span>        <span class="Statement">if</span> (abs (a.x - b.x) &gt; eps)
+<span class="lnr"> 89 </span>            <span class="Statement">return</span> a.x &lt; b.x;
+<span class="lnr"> 90 </span>
+<span class="lnr"> 91 </span>        <span class="Statement">if</span> (abs (a.y - b.y) &lt;= eps) <span class="Statement">return</span> <span class="Boolean">false</span>;
+<span class="lnr"> 92 </span>        <span class="Statement">return</span> a.y &lt; b.y;
+<span class="lnr"> 93 </span>    }
+<span class="lnr"> 94 </span>};
+<span class="lnr"> 95 </span><span class="Comment">// равенство двух точек</span>
+<span class="lnr"> 96 </span><span class="Type">class</span> equal_point
+<span class="lnr"> 97 </span>{
+<span class="lnr"> 98 </span><span class="Statement">public</span> :
+<span class="lnr"> 99 </span>    <span class="Type">bool</span> <span class="Statement">operator</span> () (point a, point b)
+<span class="lnr">100 </span>    {
+<span class="lnr">101 </span>        <span class="Statement">return</span> abs (a.x - b.x) &lt;= eps &amp;&amp; abs (a.y - b.y) &lt;= eps;
+<span class="lnr">102 </span>    }
+<span class="lnr">103 </span>};
+<span class="lnr">104 </span><span class="Comment">//-----------------------------------------------------------------------------</span>
+<span class="lnr">105 </span><span class="Comment">//*********************** Функции для работы с точками ************************</span>
+<span class="lnr">106 </span><span class="Comment">//-----------------------------------------------------------------------------</span>
+<span class="lnr">107 </span><span class="Comment">// расстояние между двумя точками</span>
+<span class="lnr">108 </span><span class="Type">double</span> dist(point a, point b)
+<span class="lnr">109 </span>{
+<span class="lnr">110 </span>    <span class="Statement">return</span> sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
+<span class="lnr">111 </span>}
+<span class="lnr">112 </span><span class="Comment">// лежит ли точка в прямоугольнике, который образуют заданные точки</span>
+<span class="lnr">113 </span><span class="Type">bool</span> point_in_box (point t, point p1, point p2)
+<span class="lnr">114 </span>{
+<span class="lnr">115 </span>    <span class="Statement">return</span>  (abs (t.x - min(p1.x, p2.x)) &lt;= eps || min(p1.x, p2.x) &lt;= t.x) &amp;&amp;
+<span class="lnr">116 </span>            (abs (max(p1.x, p2.x) - t.x) &lt;= eps || max(p1.x, p2.x) &gt;= t.x) &amp;&amp;
+<span class="lnr">117 </span>            (abs (t.y - min(p1.y, p2.y)) &lt;= eps || min(p1.y, p2.y) &lt;= t.y) &amp;&amp;
+<span class="lnr">118 </span>            (abs (max(p1.y, p2.y) - t.y) &lt;= eps || max(p1.y, p2.y) &gt;= t.y);
+<span class="lnr">119 </span>}
+<span class="lnr">120 </span><span class="Comment">// наиболее левая из двух точек</span>
+<span class="lnr">121 </span>point min_px (point a, point b)
+<span class="lnr">122 </span>{
+<span class="lnr">123 </span>        <span class="Statement">return</span> a.x &lt; b.x || (abs (a.x - b.x) &lt;= eps &amp;&amp; a.y &lt; b.y) ? a : b;
+<span class="lnr">124 </span>}
+<span class="lnr">125 </span><span class="Comment">// наиболее правая из двух точек</span>
+<span class="lnr">126 </span>point max_px (point a, point b)
+<span class="lnr">127 </span>{
+<span class="lnr">128 </span>        <span class="Statement">return</span> a.x &gt; b.x || (abs (a.x - b.x) &lt;= eps &amp;&amp; a.y &gt; b.y) ? a : b;
+<span class="lnr">129 </span>}
+<span class="lnr">130 </span><span class="Comment">// наиболее низкая из двух точек</span>
+<span class="lnr">131 </span>point min_py (point a, point b)
+<span class="lnr">132 </span>{
+<span class="lnr">133 </span>        <span class="Statement">return</span> a.y &lt; b.y || (abs (a.y - b.y) &lt;= eps &amp;&amp; a.x &lt; b.x) ? a : b;
+<span class="lnr">134 </span>}
+<span class="lnr">135 </span><span class="Comment">// наиболее высокая из двух точек</span>
+<span class="lnr">136 </span>point max_py (point a, point b)
+<span class="lnr">137 </span>{
+<span class="lnr">138 </span>        <span class="Statement">return</span> a.y &gt; b.y || (abs (a.y - b.y) &lt;= eps &amp;&amp; a.x &gt; b.x) ? a : b;
+<span class="lnr">139 </span>}
+<span class="lnr">140 </span>
+<span class="lnr">141 </span><span class="Comment">// полярный угол точки</span>
+<span class="lnr">142 </span><span class="Type">double</span> polar_angle (point p)
+<span class="lnr">143 </span>{
+<span class="lnr">144 </span>    <span class="Type">double</span> alpha = atan2(p.y, p.x);
+<span class="lnr">145 </span>    <span class="Statement">if</span> (alpha &lt; <span class="Number">0</span>) alpha += <span class="Number">2</span> * pi;
+<span class="lnr">146 </span>    <span class="Statement">return</span> alpha;
+<span class="lnr">147 </span>}
+<span class="lnr">148 </span><span class="Comment">// полярное расстояние</span>
+<span class="lnr">149 </span><span class="Type">double</span> polar_dist (<span class="Type">double</span> alpha, <span class="Type">double</span> r1, <span class="Type">double</span> betta, <span class="Type">double</span> r2)
+<span class="lnr">150 </span>{
+<span class="lnr">151 </span>    point p1 = point (r1 * cos (alpha), r1 * sin (alpha));
+<span class="lnr">152 </span>    point p2 = point (r2 * cos (betta), r2 * sin (betta));
+<span class="lnr">153 </span>    <span class="Statement">return</span> dist (p1, p2);
+<span class="lnr">154 </span>}
+<span class="lnr">155 </span><span class="Comment">// отрезки :: деление отрезка в заданном отношении</span>
+<span class="lnr">156 </span>point part_segment (point p1, point p2, <span class="Type">double</span> m, <span class="Type">double</span> n)
+<span class="lnr">157 </span>{
+<span class="lnr">158 </span>    point t;
+<span class="lnr">159 </span>    t.x = (p1.x * n + p2.x * m) / (m + n);
+<span class="lnr">160 </span>    t.y = (p1.y * n + p2.y * m) / (m + n);
+<span class="lnr">161 </span>    <span class="Statement">return</span> t;
+<span class="lnr">162 </span>}
+<span class="lnr">163 </span><span class="Comment">// поворот точки на заданный угол вокруг начала координат</span>
+<span class="lnr">164 </span>point turn (point p, <span class="Type">double</span> alpha)
+<span class="lnr">165 </span>{
+<span class="lnr">166 </span>    <span class="Type">double</span> c = cos(alpha);
+<span class="lnr">167 </span>    <span class="Type">double</span> s = sin(alpha);
+<span class="lnr">168 </span>    <span class="Statement">return</span> point (p.x * c - p.y * s, p.x * s + p.y * c);
+<span class="lnr">169 </span>}
+<span class="lnr">170 </span><span class="Comment">// поворот точки на заданный угол вокруг заданной точки</span>
+<span class="lnr">171 </span>point turn_of (point p, <span class="Type">double</span> alpha, point c)
+<span class="lnr">172 </span>{
+<span class="lnr">173 </span>    point t = turn (point (p.x - c.x, p.y - c.y), alpha);
+<span class="lnr">174 </span>    <span class="Statement">return</span> point (t.x + c.x, t.y + c.y);
+<span class="lnr">175 </span>}
+<span class="lnr">176 </span><span class="Comment">// добавление заданной части вектора к точке</span>
+<span class="lnr">177 </span>point add_vector (point p, point p1, point p2, <span class="Type">double</span> k)
+<span class="lnr">178 </span>{
+<span class="lnr">179 </span>    <span class="Statement">return</span> point (p.x + (p2.x - p1.x) * k, p.y + (p2.y - p1.y) * k);
+<span class="lnr">180 </span>}
+<span class="lnr">181 </span><span class="Comment">//-----------------------------------------------------------------------------</span>
+<span class="lnr">182 </span><span class="Comment">//*********************** Функции для работы с прямыми ************************</span>
+<span class="lnr">183 </span><span class="Comment">//-----------------------------------------------------------------------------</span>
+<span class="lnr">184 </span><span class="Comment">// уравнение прямой, проходящей через две точки</span>
+<span class="lnr">185 </span>line toline (point p1, point p2)
+<span class="lnr">186 </span>{
+<span class="lnr">187 </span>    <span class="Type">double</span> a = p2.y - p1.y;
+<span class="lnr">188 </span>    <span class="Type">double</span> b = p1.x - p2.x;
+<span class="lnr">189 </span>
+<span class="lnr">190 </span>    <span class="Statement">return</span> line(a, b, - a * p1.x - b * p1.y);
+<span class="lnr">191 </span>}
+<span class="lnr">192 </span><span class="Comment">// знак точки при подставлении в уравнение прямой</span>
+<span class="lnr">193 </span><span class="Type">int</span> point_in_line (line l, point p)
+<span class="lnr">194 </span>{
+<span class="lnr">195 </span>    <span class="Type">double</span> s = l.a * p.x + l.b * p.y + l.c;
+<span class="lnr">196 </span>    <span class="Statement">return</span> s &lt; - eps ? - <span class="Number">1</span> : s &gt; eps ? <span class="Number">1</span> : <span class="Number">0</span>;
+<span class="lnr">197 </span>}
+<span class="lnr">198 </span><span class="Comment">// параллельны ли прямые?</span>
+<span class="lnr">199 </span><span class="Type">bool</span> is_parallel_line (line l1, line l2)
+<span class="lnr">200 </span>{
+<span class="lnr">201 </span>    <span class="Statement">return</span> abs (l1.a * l2.b - l2.a * l1.b) &lt;= eps;
+<span class="lnr">202 </span>}
+<span class="lnr">203 </span><span class="Comment">// совпадают ли прямые?</span>
+<span class="lnr">204 </span><span class="Type">bool</span> is_equal_line (line l1, line l2)
+<span class="lnr">205 </span>{
+<span class="lnr">206 </span>    <span class="Statement">return</span> abs (l1.a * l2.b - l2.a * l1.b) &lt;= eps; &amp;&amp;
+<span class="lnr">207 </span>            abs (l1.a * l2.c - l2.a * l1.c) &lt;= eps; &amp;&amp;
+<span class="lnr">208 </span>            abs (l1.b * l2.c - l2.b * l1.c) &lt;= eps;
+<span class="lnr">209 </span>}
+<span class="lnr">210 </span><span class="Comment">// пересечение двух прямых</span>
+<span class="lnr">211 </span><span class="Type">int</span> cross_line (line l1, line l2, point &amp;p)
+<span class="lnr">212 </span>{
+<span class="lnr">213 </span>    <span class="Statement">if</span> (is_equal_line (l1, l2)) <span class="Statement">return</span> <span class="Number">2</span>;
+<span class="lnr">214 </span>    <span class="Statement">if</span> (is_parallel_line (l1, l2)) <span class="Statement">return</span> <span class="Number">0</span>;
+<span class="lnr">215 </span>
+<span class="lnr">216 </span>    p.x = (l2.b * l1.c - l1.b * l2.c) / (l2.a * l1.b - l1.a * l2.b);
+<span class="lnr">217 </span>    p.y = (l1.b != <span class="Number">0</span> ? (- l1.c - l1.a * p.x) / l1.b : (- l2.c - l2.a * p.x) / l2.b);
+<span class="lnr">218 </span>    <span class="Statement">return</span> <span class="Number">1</span>;
+<span class="lnr">219 </span>}
+<span class="lnr">220 </span><span class="Comment">// перпендикуляр к прямой, проходящий через заданную точку</span>
+<span class="lnr">221 </span>line perp_line (line l, point p)
+<span class="lnr">222 </span>{
+<span class="lnr">223 </span>    <span class="Statement">return</span> line (l.b, - l.a, - l.b * p.x + l.a * p.y);
+<span class="lnr">224 </span>}
+<span class="lnr">225 </span><span class="Comment">// проекция точки на прямую</span>
+<span class="lnr">226 </span>point closest_point (line l, point p)
+<span class="lnr">227 </span>{
+<span class="lnr">228 </span>    <span class="Type">double</span> k = (l.a * p.x + l.b * p.y + l.c) / (l.a * l.a + l.b * l.b);
+<span class="lnr">229 </span>    <span class="Statement">return</span> point (p.x - l.a * k, p.y - l.b * k);
+<span class="lnr">230 </span>}
+<span class="lnr">231 </span><span class="Comment">// расстояние от точки до прямой</span>
+<span class="lnr">232 </span><span class="Type">double</span> dist_point_to_line (point p, line l)
+<span class="lnr">233 </span>{
+<span class="lnr">234 </span>    <span class="Statement">return</span> abs((l.a * p.x + l.b * p.y + l.c) / sqrt(l.a * l.a + l.b * l.b));
+<span class="lnr">235 </span>}
+<span class="lnr">236 </span><span class="Comment">// прямая параллельная данной и лежащая на расстоянии d от неё</span>
+<span class="lnr">237 </span>line parallel_line_of_dist (line l, <span class="Type">double</span> d)
+<span class="lnr">238 </span>{
+<span class="lnr">239 </span>    <span class="Statement">return</span> line (l.a, l.b, l.c - d * sqrt (l.a * l.a + l.b * l.b));
+<span class="lnr">240 </span>}
+<span class="lnr">241 </span><span class="Comment">// расстояние между параллельными прямыми</span>
+<span class="lnr">242 </span><span class="Type">double</span> dist_between_line (line l1, line l2)
+<span class="lnr">243 </span>{
+<span class="lnr">244 </span>    <span class="Statement">return</span> abs (l1.c - l2.c) / sqrt (l1.a * l1.a + l2.b * l2.b);
+<span class="lnr">245 </span>}
+<span class="lnr">246 </span><span class="Comment">//-----------------------------------------------------------------------------</span>
+<span class="lnr">247 </span><span class="Comment">//*********************** Функции для работы с отрезками **********************</span>
+<span class="lnr">248 </span><span class="Comment">//-----------------------------------------------------------------------------</span>
+<span class="lnr">249 </span><span class="Comment">// принадлежит ли точка на отрезку?</span>
+<span class="lnr">250 </span><span class="Type">bool</span> point_in_segment (point t, point p1, point p2)
+<span class="lnr">251 </span>{
+<span class="lnr">252 </span>    <span class="Type">double</span> a = p2.y - p1.y;
+<span class="lnr">253 </span>    <span class="Type">double</span> b = p1.x - p2.x;
+<span class="lnr">254 </span>    <span class="Type">double</span> c = - a * p1.x - b * p1.y;
+<span class="lnr">255 </span>    <span class="Statement">if</span> (abs(a * t.x + b * t.y + c) &gt; eps) <span class="Statement">return</span> <span class="Boolean">false</span>;
+<span class="lnr">256 </span>
+<span class="lnr">257 </span>    <span class="Statement">return</span> point_in_box (t, p1, p2);
+<span class="lnr">258 </span>}
+<span class="lnr">259 </span>
+<span class="lnr">260 </span><span class="Comment">// пересекаются ли отрезки?</span>
+<span class="lnr">261 </span><span class="Type">bool</span> is_cross_segment (point p1, point p2, point p3, point p4)
+<span class="lnr">262 </span>{
+<span class="lnr">263 </span>    line l1 = toline(p1, p2);
+<span class="lnr">264 </span>    line l2 = toline(p3, p4);
+<span class="lnr">265 </span>    <span class="Type">int</span> sign1 = point_in_line(l1, p3) * point_in_line(l1, p4);
+<span class="lnr">266 </span>    <span class="Type">int</span> sign2 = point_in_line(l2, p1) * point_in_line(l2, p2);
+<span class="lnr">267 </span>
+<span class="lnr">268 </span>    <span class="Statement">if</span> (abs(sign1) &lt;= eps &amp;&amp; abs(sign2) &lt;= eps)
+<span class="lnr">269 </span>        <span class="Statement">return</span> point_in_box(p1, p3, p4) || point_in_box(p2, p3, p4) ||
+<span class="lnr">270 </span>               point_in_box(p3, p1, p2) || point_in_box(p4, p1, p2);
+<span class="lnr">271 </span>    <span class="Statement">return</span> sign1 &lt;= eps &amp;&amp; sign2 &lt;= eps;
+<span class="lnr">272 </span>}
+<span class="lnr">273 </span><span class="Comment">// пересечение отрезков</span>
+<span class="lnr">274 </span><span class="Type">bool</span> cross_segment (point p1, point p2, point p3, point p4, point &amp;t)
+<span class="lnr">275 </span>{
+<span class="lnr">276 </span>    <span class="Comment">// Строим прямые проходящие через эти отрезки и пересекаем их</span>
+<span class="lnr">277 </span>    line l1 = toline(p1, p2);
+<span class="lnr">278 </span>    line l2 = toline(p3, p4);
+<span class="lnr">279 </span>
+<span class="lnr">280 </span>    <span class="Type">int</span> flag = cross_line(l1, l2, t);
+<span class="lnr">281 </span>    <span class="Statement">if</span> (flag == <span class="Number">0</span>) <span class="Statement">return</span> <span class="Boolean">false</span>;
+<span class="lnr">282 </span>
+<span class="lnr">283 </span>    <span class="Comment">// Если прямые совпадают, проверяем каждый конец отрезка на принадлежность другому отрезку</span>
+<span class="lnr">284 </span>    <span class="Statement">if</span> (flag == <span class="Number">2</span>)
+<span class="lnr">285 </span>    {
+<span class="lnr">286 </span>        <span class="Statement">if</span> (point_in_box (p1, p3, p4)) { t = p1; <span class="Statement">return</span> <span class="Boolean">true</span>; }
+<span class="lnr">287 </span>        <span class="Statement">if</span> (point_in_box (p2, p3, p4)) { t = p2; <span class="Statement">return</span> <span class="Boolean">true</span>; }
+<span class="lnr">288 </span>        <span class="Statement">if</span> (point_in_box (p3, p1, p2)) { t = p3; <span class="Statement">return</span> <span class="Boolean">true</span>; }
+<span class="lnr">289 </span>        <span class="Statement">if</span> (point_in_box (p4, p1, p2)) { t = p4; <span class="Statement">return</span> <span class="Boolean">true</span>; }
+<span class="lnr">290 </span>        <span class="Statement">return</span> <span class="Boolean">false</span>;
+<span class="lnr">291 </span>    }
+<span class="lnr">292 </span>    <span class="Comment">// Если прямые пересекаются, проверяем принадлежит ли точка пересечения обоим отрезкам</span>
+<span class="lnr">293 </span>    <span class="Statement">return</span> point_in_box (t, p1, p2) &amp;&amp; point_in_box (t, p3, p4);
+<span class="lnr">294 </span>}
+<span class="lnr">295 </span><span class="Comment">// расстояние от точки до отрезка</span>
+<span class="lnr">296 </span><span class="Type">double</span> dist_point_to_segment (point p, point p1, point p2)
+<span class="lnr">297 </span>{
+<span class="lnr">298 </span>    point t = closest_point (toline (p1, p2), p);
+<span class="lnr">299 </span>
+<span class="lnr">300 </span>    <span class="Statement">if</span> (point_in_box (t, p1, p2))
+<span class="lnr">301 </span>        <span class="Statement">return</span> dist (p, t);
+<span class="lnr">302 </span>    <span class="Statement">else</span>
+<span class="lnr">303 </span>        <span class="Statement">return</span> min (dist (p, p1), dist (p, p2));
+<span class="lnr">304 </span>}
+<span class="lnr">305 </span>
+<span class="lnr">306 </span><span class="Comment">// пересечение отрезка с прямой</span>
+<span class="lnr">307 </span><span class="Type">int</span> cross_segment_line (point p1, point p2, line l, point &amp;p)
+<span class="lnr">308 </span>{
+<span class="lnr">309 </span>    line t = toline (p1, p2);
+<span class="lnr">310 </span>    <span class="Type">int</span> flag = cross_line (l, t, p);
+<span class="lnr">311 </span>    <span class="Statement">if</span> (flag == <span class="Number">0</span>) <span class="Statement">return</span> <span class="Number">0</span>;
+<span class="lnr">312 </span>    <span class="Statement">if</span> (flag == <span class="Number">2</span>) <span class="Statement">return</span> <span class="Number">2</span>;
+<span class="lnr">313 </span>
+<span class="lnr">314 </span>    <span class="Statement">if</span> (point_in_box (p, p1, p2)) <span class="Statement">return</span> <span class="Number">1</span>;
+<span class="lnr">315 </span>    <span class="Statement">return</span> <span class="Number">0</span>;
+<span class="lnr">316 </span>}
+<span class="lnr">317 </span><span class="Comment">//-----------------------------------------------------------------------------</span>
+<span class="lnr">318 </span><span class="Comment">//*********************** Функции для работы с треугольниками *****************</span>
+<span class="lnr">319 </span><span class="Comment">//-----------------------------------------------------------------------------</span>
+<span class="lnr">320 </span><span class="Comment">// ориентированная площадь треугольника</span>
+<span class="lnr">321 </span><span class="Type">double</span> area_triangle (point a, point b, point c)
+<span class="lnr">322 </span>{
+<span class="lnr">323 </span>    <span class="Statement">return</span> <span class="Float">0.5</span> * (a.x * b.y + b.x * c.y + c.x * a.y - a.y * b.x - b.y * c.x - c.y * a.x);
+<span class="lnr">324 </span>}
+<span class="lnr">325 </span><span class="Comment">// угол между тремя точками - через произведение векторов</span>
+<span class="lnr">326 </span><span class="Type">double</span> angle_point (point a, point b, point c)
+<span class="lnr">327 </span>{
+<span class="lnr">328 </span>    <span class="Type">double</span> x1 = a.x - b.x, x2 = c.x - b.x;
+<span class="lnr">329 </span>    <span class="Type">double</span> y1 = a.y - b.y, y2 = c.y - b.y;
+<span class="lnr">330 </span>    <span class="Type">double</span> d1 = sqrt (x1 * x1 + y1 * y1);
+<span class="lnr">331 </span>    <span class="Type">double</span> d2 = sqrt (x2 * x2 + y2 * y2);
+<span class="lnr">332 </span>    <span class="Statement">return</span> acos ((x1 * x2 + y1 * y2) / (d1 * d2));
+<span class="lnr">333 </span>}
+<span class="lnr">334 </span><span class="Comment">//Лежит ли точка справа от отрезка в обходе против часовой стрелки?</span>
+<span class="lnr">335 </span><span class="Type">bool</span> ccw (point a, point b, point c)
+<span class="lnr">336 </span>{
+<span class="lnr">337 </span>        <span class="Statement">return</span> area_triangle (a, b, c) &gt; eps;
+<span class="lnr">338 </span>}
+<span class="lnr">339 </span><span class="Comment">// высота угла</span>
+<span class="lnr">340 </span>line height_line (point a, point b, point c)
+<span class="lnr">341 </span>{
+<span class="lnr">342 </span>    <span class="Statement">return</span> perp_line (toline (a, c), b);
+<span class="lnr">343 </span>}
+<span class="lnr">344 </span><span class="Comment">// медиана угла</span>
+<span class="lnr">345 </span>line median_line (point a, point b, point c)
+<span class="lnr">346 </span>{
+<span class="lnr">347 </span>    <span class="Statement">return</span> toline (b, point ((a.x + c.x) / <span class="Number">2</span>, (a.y + c.y) / <span class="Number">2</span>));
+<span class="lnr">348 </span>}
+<span class="lnr">349 </span><span class="Comment">// биссектриса угла</span>
+<span class="lnr">350 </span>line bisector_line (point a, point b, point c)
+<span class="lnr">351 </span>{
+<span class="lnr">352 </span>    <span class="Type">double</span> ab = dist (a, b);
+<span class="lnr">353 </span>    <span class="Type">double</span> bc = dist (b, c);
+<span class="lnr">354 </span>    point tab = part_segment (b, a, bc, ab);
+<span class="lnr">355 </span>    point tbc = part_segment (b, c, ab, bc);
+<span class="lnr">356 </span>    point p = part_segment (tab, tbc, <span class="Number">1</span>, <span class="Number">1</span>);
+<span class="lnr">357 </span>    <span class="Statement">return</span> toline (b, p);
+<span class="lnr">358 </span>}
+<span class="lnr">359 </span><span class="Comment">// вписанная в треугольник окружность</span>
+<span class="lnr">360 </span>circle entered_circle (point a, point b, point c)
+<span class="lnr">361 </span>{
+<span class="lnr">362 </span>    line ba = bisector_line (b, a, c);
+<span class="lnr">363 </span>    line bb = bisector_line (a, b, c);
+<span class="lnr">364 </span>
+<span class="lnr">365 </span>    circle res;
+<span class="lnr">366 </span>    <span class="Type">int</span> flag = cross_line (ba, bb, res.c);
+<span class="lnr">367 </span>    res.r = dist_point_to_line (res.c, toline (a, b));
+<span class="lnr">368 </span>    <span class="Statement">return</span> res;
+<span class="lnr">369 </span>}
+<span class="lnr">370 </span><span class="Comment">// описанная около треугольника окружность</span>
+<span class="lnr">371 </span>circle described_circle (point a, point b, point c)
+<span class="lnr">372 </span>{
+<span class="lnr">373 </span>    point tab = part_segment (a, b, <span class="Number">1</span>, <span class="Number">1</span>);
+<span class="lnr">374 </span>    point tbc = part_segment (b, c, <span class="Number">1</span>, <span class="Number">1</span>);
+<span class="lnr">375 </span>    line pab = perp_line (toline (a, b), tab);
+<span class="lnr">376 </span>    line pbc = perp_line (toline (b, c), tbc);
+<span class="lnr">377 </span>
+<span class="lnr">378 </span>    circle res;
+<span class="lnr">379 </span>    <span class="Type">int</span> flag = cross_line (pab, pbc, res.c);
+<span class="lnr">380 </span>    res.r = dist (res.c, a);
+<span class="lnr">381 </span>    <span class="Statement">return</span> res;
+<span class="lnr">382 </span>}
+<span class="lnr">383 </span><span class="Comment">//-----------------------------------------------------------------------------</span>
+<span class="lnr">384 </span><span class="Comment">//*********************** Функции для работы с окружностями *******************</span>
+<span class="lnr">385 </span><span class="Comment">//-----------------------------------------------------------------------------</span>
+<span class="lnr">386 </span><span class="Comment">// положение точки относительно окружности</span>
+<span class="lnr">387 </span><span class="Type">int</span> point_in_circle (point p, circle c)
+<span class="lnr">388 </span>{
+<span class="lnr">389 </span>    <span class="Type">double</span> d = dist (p, c.c);
+<span class="lnr">390 </span>    <span class="Statement">if</span> (abs (c.r - d) &lt;= eps) <span class="Statement">return</span> <span class="Number">1</span>;
+<span class="lnr">391 </span>    <span class="Statement">if</span> (c.r &gt; d) <span class="Statement">return</span> <span class="Number">0</span>;
+<span class="lnr">392 </span>    <span class="Statement">return</span> <span class="Number">2</span>;
+<span class="lnr">393 </span>}
+<span class="lnr">394 </span><span class="Comment">// минимальная окружность покрывающая три любые точки</span>
+<span class="lnr">395 </span>circle min_circle_for_three_point (point a, point b, point c)
+<span class="lnr">396 </span>{
+<span class="lnr">397 </span>    <span class="Comment">// если это треугольник, то описываем его</span>
+<span class="lnr">398 </span>    <span class="Statement">if</span> (abs (area_triangle (a, b, c)) &gt; eps)
+<span class="lnr">399 </span>        <span class="Statement">return</span> described_circle (a, b, c);
+<span class="lnr">400 </span>    <span class="Comment">// иначе это отрезок и точка в нём - из середины проводим окружность диаметром в отрезок</span>
+<span class="lnr">401 </span>    point maxP = max_px (max_px (a, b), c);
+<span class="lnr">402 </span>    point minP = min_px (max_px (a, b), c);
+<span class="lnr">403 </span>    <span class="Statement">return</span> circle (part_segment (maxP, minP, <span class="Number">1</span>, <span class="Number">1</span>), <span class="Float">0.5</span> * dist (minP, maxP));
+<span class="lnr">404 </span>}
+<span class="lnr">405 </span><span class="Comment">// точки пересечения касательной с окружностью, решение основанное на повороте точек</span>
+<span class="lnr">406 </span><span class="Type">int</span> tangent_points (point p, circle c, point &amp;p1, point &amp;p2)
+<span class="lnr">407 </span>{
+<span class="lnr">408 </span>    <span class="Comment">// случаи, когда решений меньше двух</span>
+<span class="lnr">409 </span>    <span class="Type">int</span> flag = point_in_circle (p, c);
+<span class="lnr">410 </span>    <span class="Statement">if</span> (flag == <span class="Number">0</span>) <span class="Statement">return</span> <span class="Number">0</span>;
+<span class="lnr">411 </span>    <span class="Statement">if</span> (flag == <span class="Number">1</span>)
+<span class="lnr">412 </span>    {
+<span class="lnr">413 </span>        p1 = p;
+<span class="lnr">414 </span>        <span class="Statement">return</span> <span class="Number">1</span>;
+<span class="lnr">415 </span>    }
+<span class="lnr">416 </span>    <span class="Comment">// угол между центром окружности и точкой касания</span>
+<span class="lnr">417 </span>    <span class="Type">double</span> d = dist (p, c.c);
+<span class="lnr">418 </span>    <span class="Type">double</span> alpha = asin (c.r / d);
+<span class="lnr">419 </span>    <span class="Comment">// поворот центра окружности вокруг заданной точки в обе стороны на заданный угол</span>
+<span class="lnr">420 </span>    point _p1 = turn_of (c.c, alpha, p);
+<span class="lnr">421 </span>    point _p2 = turn_of (c.c, - alpha, p);
+<span class="lnr">422 </span>    <span class="Comment">// расстояние от точки до точки касания и вычисляем точки касания</span>
+<span class="lnr">423 </span>    <span class="Type">double</span> k = sqrt (d * d - c.r * c.r);
+<span class="lnr">424 </span>    d = dist (p, _p1);
+<span class="lnr">425 </span>    p1 = part_segment (p, _p1, k, d - k);
+<span class="lnr">426 </span>    p2 = part_segment (p, _p2, k, d - k);
+<span class="lnr">427 </span>
+<span class="lnr">428 </span>    <span class="Statement">return</span> <span class="Number">2</span>;
+<span class="lnr">429 </span>}
+<span class="lnr">430 </span>
+<span class="lnr">431 </span><span class="Comment">// пересечение прямой с окружностью</span>
+<span class="lnr">432 </span><span class="Type">int</span> cross_line_circle (line l, circle c, point &amp;p1, point &amp;p2)
+<span class="lnr">433 </span>{
+<span class="lnr">434 </span>    <span class="Comment">// проекция центра окружности на прямую</span>
+<span class="lnr">435 </span>    point p = closest_point (l, c.c);
+<span class="lnr">436 </span>    <span class="Comment">// сколько всего решений?</span>
+<span class="lnr">437 </span>    <span class="Type">int</span> flag = <span class="Number">0</span>;
+<span class="lnr">438 </span>    <span class="Type">double</span> d = dist (c.c, p);
+<span class="lnr">439 </span>    <span class="Statement">if</span> (abs (d - c.r) &lt;= eps) flag = <span class="Number">1</span>;
+<span class="lnr">440 </span>    <span class="Statement">else</span>
+<span class="lnr">441 </span>        <span class="Statement">if</span> (c.r &gt; d) flag = <span class="Number">2</span>;
+<span class="lnr">442 </span>        <span class="Statement">else</span> <span class="Statement">return</span> <span class="Number">0</span>;
+<span class="lnr">443 </span>
+<span class="lnr">444 </span>    <span class="Comment">// находим расстояние от проекции до точек пересечения</span>
+<span class="lnr">445 </span>    <span class="Type">double</span> k = sqrt (c.r * c.r - d * d);
+<span class="lnr">446 </span>    <span class="Type">double</span> t = dist (point (<span class="Number">0</span>, <span class="Number">0</span>), point (l.b, - l.a));
+<span class="lnr">447 </span>    <span class="Comment">// добавляем к проекции векторы направленные к точкам пеерсечения</span>
+<span class="lnr">448 </span>    p1 = add_vector (p, point (<span class="Number">0</span>, <span class="Number">0</span>), point (- l.b, l.a), k / t);
+<span class="lnr">449 </span>    p2 = add_vector (p, point (<span class="Number">0</span>, <span class="Number">0</span>), point (l.b, - l.a), k / t);
+<span class="lnr">450 </span>
+<span class="lnr">451 </span>    <span class="Statement">return</span> flag;
+<span class="lnr">452 </span>}
+<span class="lnr">453 </span><span class="Comment">// пересечение окружностей</span>
+<span class="lnr">454 </span><span class="Type">int</span> cross_circle (<span class="Type">double</span> x1, <span class="Type">double</span> y1, <span class="Type">double</span> r1,
+<span class="lnr">455 </span>                  <span class="Type">double</span> x2, <span class="Type">double</span> y2, <span class="Type">double</span> r2, point &amp;p1, point &amp;p2)
+<span class="lnr">456 </span>{
+<span class="lnr">457 </span>    <span class="Statement">if</span> (abs (x1 - x2) &lt;= eps &amp;&amp; abs (y1 - y2) &lt;= eps &amp;&amp; abs (r1 - r2) &lt;= eps)
+<span class="lnr">458 </span>        <span class="Statement">return</span> <span class="Number">3</span>;
+<span class="lnr">459 </span>    <span class="Type">double</span> a = <span class="Number">2</span> * (x2 - x1);
+<span class="lnr">460 </span>    <span class="Type">double</span> b = <span class="Number">2</span> * (y2 - y1);
+<span class="lnr">461 </span>    <span class="Type">double</span> c = x1 * x1 + y1 * y1 - r1 * r1 - (x2 * x2 + y2 * y2 - r2 * r2);
+<span class="lnr">462 </span>    <span class="Statement">return</span> cross_line_circle (line (a, b, c), circle (x1, y1, r1), p1, p2);
+<span class="lnr">463 </span>}
+<span class="lnr">464 </span><span class="Comment">// точки касания касательной с окружностью</span>
+<span class="lnr">465 </span><span class="Type">int</span> contact_points (point p, circle c, point &amp;p1, point &amp;p2)
+<span class="lnr">466 </span>{
+<span class="lnr">467 </span>    <span class="Type">int</span> flag = point_in_circle (p, c);
+<span class="lnr">468 </span>    <span class="Statement">if</span> (flag == <span class="Number">0</span>) <span class="Statement">return</span> <span class="Number">0</span>;
+<span class="lnr">469 </span>    <span class="Statement">if</span> (flag == <span class="Number">1</span>)
+<span class="lnr">470 </span>    {
+<span class="lnr">471 </span>        p1 = p;
+<span class="lnr">472 </span>        <span class="Statement">return</span> <span class="Number">1</span>;
+<span class="lnr">473 </span>    }
+<span class="lnr">474 </span>    <span class="Comment">// находим расстояние до точек касания</span>
+<span class="lnr">475 </span>    <span class="Type">double</span> d = dist (p, c.c);
+<span class="lnr">476 </span>    <span class="Type">double</span> k = sqrt (d * d - c.r * c.r);
+<span class="lnr">477 </span>    <span class="Statement">return</span> cross_circle (p.x, p.y, k, c.c.x, c.c.y, c.r, p1, p2);
+<span class="lnr">478 </span>}
+<span class="lnr">479 </span><span class="Comment">//-----------------------------------------------------------------------------</span>
+<span class="lnr">480 </span><span class="Comment">//*********************** Функции для работы с лучами *************************</span>
+<span class="lnr">481 </span><span class="Comment">//-----------------------------------------------------------------------------</span>
+<span class="lnr">482 </span><span class="Comment">// принадлежит ли точка лучу?</span>
+<span class="lnr">483 </span><span class="Type">bool</span> point_in_ray (point p, point p1, point p2)
+<span class="lnr">484 </span>{
+<span class="lnr">485 </span>    <span class="Comment">// принадлежит ли точка прямой луча</span>
+<span class="lnr">486 </span>    line l = toline (p1, p2);
+<span class="lnr">487 </span>    <span class="Statement">if</span> (point_in_line (l, p) != <span class="Number">0</span>) <span class="Statement">return</span> <span class="Boolean">false</span>;
+<span class="lnr">488 </span>
+<span class="lnr">489 </span>    <span class="Comment">// если прямая вертикальная, то проверяем на y</span>
+<span class="lnr">490 </span>    <span class="Statement">if</span> (abs (l.b) &lt;= eps)
+<span class="lnr">491 </span>        <span class="Statement">if</span> (p2.y &gt;= p1.y)
+<span class="lnr">492 </span>            <span class="Statement">return</span> p.y &gt;= p1.y;
+<span class="lnr">493 </span>        <span class="Statement">else</span>
+<span class="lnr">494 </span>            <span class="Statement">return</span> p.y &lt;= p1.y;
+<span class="lnr">495 </span>
+<span class="lnr">496 </span>    <span class="Comment">// иначе проверяем на x </span>
+<span class="lnr">497 </span>    <span class="Statement">if</span> (p2.x &gt;= p1.x)
+<span class="lnr">498 </span>        <span class="Statement">return</span> p.x &gt;= p1.x;
+<span class="lnr">499 </span>    <span class="Statement">else</span>
+<span class="lnr">500 </span>        <span class="Statement">return</span> p.x &lt;= p1.x;
+<span class="lnr">501 </span>}
+<span class="lnr">502 </span><span class="Comment">// расстояние от точки до луча</span>
+<span class="lnr">503 </span><span class="Type">double</span> dist_point_to_ray (point p, point p1, point p2)
+<span class="lnr">504 </span>{
+<span class="lnr">505 </span>    <span class="Comment">// проектируем точку на прямую, проходящую по лучу</span>
+<span class="lnr">506 </span>    line l = toline (p1, p2);
+<span class="lnr">507 </span>    point t = closest_point (l, p);
+<span class="lnr">508 </span>
+<span class="lnr">509 </span>    <span class="Comment">// если полученная точка принадлежит лучу, то возвращаем расстояние до прямой</span>
+<span class="lnr">510 </span>    <span class="Statement">if</span> (point_in_ray (t, p1, p2))
+<span class="lnr">511 </span>        <span class="Statement">return</span> dist (p, t);
+<span class="lnr">512 </span>
+<span class="lnr">513 </span>    <span class="Comment">// иначе возвращаем расстояние до начала луча</span>
+<span class="lnr">514 </span>    <span class="Statement">return</span> dist (p, p1);
+<span class="lnr">515 </span>}
+<span class="lnr">516 </span><span class="Comment">// пересение луча с окружностью</span>
+<span class="lnr">517 </span><span class="Type">int</span> cross_ray_circle (point p, point t, circle c, point &amp;p1, point &amp;p2)
+<span class="lnr">518 </span>{
+<span class="lnr">519 </span>    <span class="Comment">// пересекаем прямую луча с окружностью</span>
+<span class="lnr">520 </span>    line l = toline (p, t);
+<span class="lnr">521 </span>    <span class="Type">int</span> flag = cross_line_circle (l, c, p1, p2);
+<span class="lnr">522 </span>    <span class="Statement">if</span> (flag == <span class="Number">0</span>) <span class="Statement">return</span> <span class="Number">0</span>;
+<span class="lnr">523 </span>
+<span class="lnr">524 </span>    <span class="Comment">// если точки пересечения есть, то проверяем их на принадлежность лучу</span>
+<span class="lnr">525 </span>    <span class="Comment">// если точка одна</span>
+<span class="lnr">526 </span>    <span class="Statement">if</span> (flag == <span class="Number">1</span>)
+<span class="lnr">527 </span>        <span class="Statement">if</span> (point_in_ray (p1, p, t))
+<span class="lnr">528 </span>            <span class="Statement">return</span> <span class="Number">1</span>;
+<span class="lnr">529 </span>        <span class="Statement">else</span>
+<span class="lnr">530 </span>            <span class="Statement">return</span> <span class="Number">0</span>;
+<span class="lnr">531 </span>
+<span class="lnr">532 </span>    <span class="Comment">// если точки две</span>
+<span class="lnr">533 </span>    <span class="Type">bool</span> b1 = point_in_ray (p1, p, t);
+<span class="lnr">534 </span>    <span class="Type">bool</span> b2 = point_in_ray (p2, p, t);
+<span class="lnr">535 </span>
+<span class="lnr">536 </span>    <span class="Statement">if</span> (b1)
+<span class="lnr">537 </span>        <span class="Statement">if</span> (b2)
+<span class="lnr">538 </span>            <span class="Statement">return</span> <span class="Number">2</span>;
+<span class="lnr">539 </span>        <span class="Statement">else</span>
+<span class="lnr">540 </span>            <span class="Statement">return</span> <span class="Number">1</span>;
+<span class="lnr">541 </span>    <span class="Statement">else</span>
+<span class="lnr">542 </span>        <span class="Statement">if</span> (b2)
+<span class="lnr">543 </span>        {
+<span class="lnr">544 </span>            p1 = p2;
+<span class="lnr">545 </span>            <span class="Statement">return</span> <span class="Number">1</span>;
+<span class="lnr">546 </span>        }
+<span class="lnr">547 </span>        <span class="Statement">else</span>
+<span class="lnr">548 </span>            <span class="Statement">return</span> <span class="Number">0</span>;
+<span class="lnr">549 </span>}
+<span class="lnr">550 </span><span class="Comment">// поиск луча с известным началом, который не пересекает ни одну из заданных окружностей</span>
+<span class="lnr">551 </span><span class="Type">class</span> less_of_polar_angle
+<span class="lnr">552 </span>{
+<span class="lnr">553 </span><span class="Statement">public</span> :
+<span class="lnr">554 </span>    <span class="Type">bool</span> <span class="Statement">operator</span> () (circle c1, circle c2)
+<span class="lnr">555 </span>    {
+<span class="lnr">556 </span>        <span class="Statement">return</span> c1.alpha &lt; c2.alpha;
+<span class="lnr">557 </span>    }
+<span class="lnr">558 </span>};
+<span class="lnr">559 </span><span class="Type">bool</span> ray_nocross_for_circset (point p, vector &lt; circle &gt; v, point &amp;t)
+<span class="lnr">560 </span>{
+<span class="lnr">561 </span>    <span class="Type">int</span> n = v.size();
+<span class="lnr">562 </span>    <span class="Type">int</span> i, j, k;
+<span class="lnr">563 </span>
+<span class="lnr">564 </span>    <span class="Comment">// для каждой окружности находим её полярный угол</span>
+<span class="lnr">565 </span>    <span class="Statement">for</span> (i = <span class="Number">0</span>; i &lt; n; ++ i)
+<span class="lnr">566 </span>        v[i].alpha = polar_angle (point (v[i].c.x - p.x, v[i].c.y - p.y));
+<span class="lnr">567 </span>
+<span class="lnr">568 </span>    <span class="Comment">// сортируем все окружности по полярному углу одной из точек</span>
+<span class="lnr">569 </span>    sort (v.begin (), v.end (), less_of_polar_angle ());
+<span class="lnr">570 </span>
+<span class="lnr">571 </span>    <span class="Comment">// находим окружность с максимальным радиусом</span>
+<span class="lnr">572 </span>    k = <span class="Number">0</span>;
+<span class="lnr">573 </span>    <span class="Statement">for</span> (i = <span class="Number">1</span>; i &lt; n; ++ i)
+<span class="lnr">574 </span>        <span class="Statement">if</span> (v[i].r &gt; v[k].r)
+<span class="lnr">575 </span>            k = i;
+<span class="lnr">576 </span>
+<span class="lnr">577 </span>    <span class="Comment">// рассматриваем все окружности по очереди, начиная с k</span>
+<span class="lnr">578 </span>    i = k; <span class="Comment">// текущая окружность</span>
+<span class="lnr">579 </span>    <span class="Statement">do</span>
+<span class="lnr">580 </span>    {
+<span class="lnr">581 </span>        point p1, p2;
+<span class="lnr">582 </span>        <span class="Type">int</span> flag = contact_points (p, v[i], p1, p2);
+<span class="lnr">583 </span>        <span class="Type">double</span> alpha = polar_angle (point (p1.x - p.x, p1.y - p.y));
+<span class="lnr">584 </span>        <span class="Type">double</span> betta = polar_angle (point (p2.x - p.x, p2.y - p.y));
+<span class="lnr">585 </span>
+<span class="lnr">586 </span>        <span class="Comment">// находим левую точку касания - t</span>
+<span class="lnr">587 </span>        <span class="Statement">if</span> (abs (alpha - betta) &gt;= pi)
+<span class="lnr">588 </span>            <span class="Statement">if</span> (alpha &lt; betta)
+<span class="lnr">589 </span>                t = p1;
+<span class="lnr">590 </span>            <span class="Statement">else</span>
+<span class="lnr">591 </span>                t = p2;
+<span class="lnr">592 </span>        <span class="Statement">else</span>
+<span class="lnr">593 </span>            <span class="Statement">if</span> (alpha &lt; betta)
+<span class="lnr">594 </span>                t = p2;
+<span class="lnr">595 </span>            <span class="Statement">else</span>
+<span class="lnr">596 </span>                t = p1;
+<span class="lnr">597 </span>
+<span class="lnr">598 </span>        <span class="Comment">// отодвигаем её на 0.001 по перпендикуляру влево</span>
+<span class="lnr">599 </span>        <span class="Type">double</span> d = <span class="Float">0.001</span> / dist (v[i].c, t);
+<span class="lnr">600 </span>        t = add_vector (t, v[i].c, t, d);
+<span class="lnr">601 </span>
+<span class="lnr">602 </span>        <span class="Comment">// ищем первую окружность, которая пересекает луч (p, t)</span>
+<span class="lnr">603 </span>        <span class="Type">bool</span> flag_cross = <span class="Boolean">false</span>;
+<span class="lnr">604 </span>        j = (i + <span class="Number">1</span>) % n;
+<span class="lnr">605 </span>        <span class="Statement">do</span>
+<span class="lnr">606 </span>        {
+<span class="lnr">607 </span>            <span class="Statement">if</span> (cross_ray_circle (p, t, v[j], p1, p2) != <span class="Number">0</span>)
+<span class="lnr">608 </span>            {
+<span class="lnr">609 </span>                flag_cross = <span class="Boolean">true</span>;
+<span class="lnr">610 </span>                i = j;
+<span class="lnr">611 </span>                <span class="Statement">break</span>;
+<span class="lnr">612 </span>            }
+<span class="lnr">613 </span>            j = (j + <span class="Number">1</span>) % n;
+<span class="lnr">614 </span>        }
+<span class="lnr">615 </span>        <span class="Statement">while</span> (j != k);
+<span class="lnr">616 </span>
+<span class="lnr">617 </span>        <span class="Comment">// если все окружности не пересекают этот луч</span>
+<span class="lnr">618 </span>        <span class="Statement">if</span> (flag_cross == <span class="Boolean">false</span>)    <span class="Statement">return</span> <span class="Boolean">true</span>;
+<span class="lnr">619 </span>    }
+<span class="lnr">620 </span>    <span class="Statement">while</span> (i != k);
+<span class="lnr">621 </span>
+<span class="lnr">622 </span>    <span class="Statement">return</span> <span class="Boolean">false</span>;
+<span class="lnr">623 </span>}
+<span class="lnr">624 </span><span class="Comment">//-----------------------------------------------------------------------------</span>
+<span class="lnr">625 </span><span class="Comment">//*********************** Функции для работы с многоугольниками ***************</span>
+<span class="lnr">626 </span><span class="Comment">//-----------------------------------------------------------------------------</span>
+<span class="lnr">627 </span><span class="Comment">// ориентированная площадь многоугольника</span>
+<span class="lnr">628 </span><span class="Type">double</span> area_polygon (vector &lt; point &gt; p)
+<span class="lnr">629 </span>{
+<span class="lnr">630 </span>    <span class="Type">int</span> i, j;
+<span class="lnr">631 </span>    <span class="Type">double</span> s = <span class="Number">0</span>;
+<span class="lnr">632 </span>    <span class="Statement">for</span> (i = <span class="Number">0</span>; i &lt; p.size(); ++ i)
+<span class="lnr">633 </span>    {
+<span class="lnr">634 </span>        j = (i + <span class="Number">1</span>) % p.size();
+<span class="lnr">635 </span>        s += p[i].x * p[j].y - p[j].x * p[i].y;
+<span class="lnr">636 </span>    }
+<span class="lnr">637 </span>    <span class="Statement">return</span> <span class="Float">0.5</span> * s;
+<span class="lnr">638 </span>}
+<span class="lnr">639 </span>
+<span class="lnr">640 </span><span class="Comment">// периметр многоугольника</span>
+<span class="lnr">641 </span><span class="Type">double</span> perimeter_polygon (vector &lt; point &gt; p)
+<span class="lnr">642 </span>{
+<span class="lnr">643 </span>    <span class="Type">int</span> i, j;
+<span class="lnr">644 </span>    <span class="Type">double</span> perimeter = <span class="Number">0</span>;
+<span class="lnr">645 </span>    <span class="Statement">for</span> (i = <span class="Number">0</span>; i &lt; p.size(); ++ i)
+<span class="lnr">646 </span>    {
+<span class="lnr">647 </span>        j = (i + <span class="Number">1</span>) % p.size();
+<span class="lnr">648 </span>        perimeter += dist (p[i], p[j]);
+<span class="lnr">649 </span>    }
+<span class="lnr">650 </span>    <span class="Statement">return</span> perimeter;
+<span class="lnr">651 </span>}
+<span class="lnr">652 </span><span class="Comment">// принадлежит ли точка в многоугольнику?</span>
+<span class="lnr">653 </span><span class="Type">bool</span> point_in_polygon (point t, vector &lt; point &gt; p)
+<span class="lnr">654 </span>{
+<span class="lnr">655 </span>        <span class="Type">int</span> i, j;
+<span class="lnr">656 </span>        <span class="Type">int</span> count = <span class="Number">0</span>;
+<span class="lnr">657 </span>        <span class="Statement">for</span> (i = <span class="Number">0</span>; i &lt; p.size(); ++ i)
+<span class="lnr">658 </span>        {
+<span class="lnr">659 </span>                j = (i + <span class="Number">1</span>) % p.size();
+<span class="lnr">660 </span>                <span class="Statement">if</span> (min (p[i].y, p[j].y) &lt; t.y &amp;&amp; t.y &lt;= max (p[i].y, p[j].y) &amp;&amp;
+<span class="lnr">661 </span>                    ccw (min_py (p[i], p[j]), max_py (p[i], p[j]), t))
+<span class="lnr">662 </span>                {
+<span class="lnr">663 </span>                    <span class="Comment">// если проекция точки лежит на отрезке и точка находится справа от отрезка</span>
+<span class="lnr">664 </span>                    <span class="Comment">// то увеличиваем количество &quot;вхождений&quot; точки в многоугольник</span>
+<span class="lnr">665 </span>                    ++ count;
+<span class="lnr">666 </span>                }
+<span class="lnr">667 </span>        }
+<span class="lnr">668 </span>        <span class="Statement">return</span> count % <span class="Number">2</span>;
+<span class="lnr">669 </span>}
+<span class="lnr">670 </span><span class="Comment">// количество точек на границе многоугольника</span>
+<span class="lnr">671 </span><span class="Type">long</span> <span class="Type">long</span> count_B (vector &lt; point &gt; p)
+<span class="lnr">672 </span>{
+<span class="lnr">673 </span>    <span class="Type">int</span> i, j;
+<span class="lnr">674 </span>    <span class="Type">long</span> <span class="Type">long</span> count = <span class="Number">0</span>;
+<span class="lnr">675 </span>    <span class="Statement">for</span> (i = <span class="Number">0</span>; i &lt; p.size(); ++ i)
+<span class="lnr">676 </span>    {
+<span class="lnr">677 </span>        j = (i + <span class="Number">1</span>) % p.size();
+<span class="lnr">678 </span>        count += gcd (p[j].x - p[i].x, p[j].y - p[i].y);
+<span class="lnr">679 </span>    }
+<span class="lnr">680 </span>    <span class="Statement">return</span> count;
+<span class="lnr">681 </span>}
+<span class="lnr">682 </span><span class="Comment">// количество точек внутри многоугольника</span>
+<span class="lnr">683 </span><span class="Type">long</span> <span class="Type">long</span> count_I (vector &lt; point &gt; p)
+<span class="lnr">684 </span>{
+<span class="lnr">685 </span>    <span class="Statement">return</span> abs (area_polygon (p)) - count_B (p) / <span class="Number">2</span> + <span class="Number">1</span>;
+<span class="lnr">686 </span>}
+<span class="lnr">687 </span><span class="Comment">// выпуклый ли многоугольник?</span>
+<span class="lnr">688 </span><span class="Type">bool</span> is_convex (vector &lt; point &gt; p)
+<span class="lnr">689 </span>{
+<span class="lnr">690 </span>    <span class="Type">int</span> l, i, r;
+<span class="lnr">691 </span>    <span class="Type">int</span> n = p.size();
+<span class="lnr">692 </span>    <span class="Type">bool</span> isccw = ccw (p[n - <span class="Number">1</span>], p[<span class="Number">0</span>], p[<span class="Number">1</span>]);
+<span class="lnr">693 </span>    <span class="Statement">for</span> (i = <span class="Number">1</span>; i &lt; n; ++ i)
+<span class="lnr">694 </span>    {
+<span class="lnr">695 </span>        l = (i - <span class="Number">1</span> + n) % n;
+<span class="lnr">696 </span>        r = (i + <span class="Number">1</span>) % n;
+<span class="lnr">697 </span>        <span class="Statement">if</span> (ccw (p[l], p[i], p[r]) != isccw)
+<span class="lnr">698 </span>            <span class="Statement">return</span> <span class="Boolean">false</span>;
+<span class="lnr">699 </span>    }
+<span class="lnr">700 </span>    <span class="Statement">return</span> <span class="Boolean">true</span>;
+<span class="lnr">701 </span>}
+<span class="lnr">702 </span><span class="Comment">// выпуклая оболочка - алгоритм Джарвиса</span>
+<span class="lnr">703 </span><span class="Type">void</span> hull_jarvis (vector &lt; point &gt; p, vector &lt; <span class="Type">int</span> &gt; &amp;ip)
+<span class="lnr">704 </span>{
+<span class="lnr">705 </span>    <span class="Type">int</span> n = p.size();
+<span class="lnr">706 </span>    <span class="Type">int</span> first, q, next, i;
+<span class="lnr">707 </span>    <span class="Type">double</span> sign;
+<span class="lnr">708 </span>    <span class="Comment">// находим самую нижнюю из самых левых точек</span>
+<span class="lnr">709 </span>    first = <span class="Number">0</span>;
+<span class="lnr">710 </span>    <span class="Statement">for</span> (i = <span class="Number">1</span>; i &lt; n; ++ i)
+<span class="lnr">711 </span>        <span class="Statement">if</span> (p[i].x &lt; p[first].x || (p[i].x == p[first].x &amp;&amp; p[i].y &lt; p[first].y))
+<span class="lnr">712 </span>            first = i;
+<span class="lnr">713 </span>
+<span class="lnr">714 </span>    q = first; <span class="Comment">// текущая точка</span>
+<span class="lnr">715 </span>    <span class="Comment">// добавляем точки в оболочку</span>
+<span class="lnr">716 </span>    <span class="Statement">do</span>
+<span class="lnr">717 </span>    {
+<span class="lnr">718 </span>        ip.push_back(q);
+<span class="lnr">719 </span>        next = q;
+<span class="lnr">720 </span>        <span class="Comment">// ищем следующую точку</span>
+<span class="lnr">721 </span>        <span class="Statement">for</span> (i = n - <span class="Number">1</span>; i &gt;= <span class="Number">0</span>; -- i)
+<span class="lnr">722 </span>            <span class="Statement">if</span> (p[i].x != p[q].x || p[i].y != p[q].y)
+<span class="lnr">723 </span>            {
+<span class="lnr">724 </span>                sign = area_triangle (p[q], p[i], p[next]);
+<span class="lnr">725 </span>
+<span class="lnr">726 </span>                <span class="Statement">if</span> (next == q || sign &gt; <span class="Number">0</span> || (sign == <span class="Number">0</span> &amp;&amp; point_in_box (p[next], p[q], p[i])))
+<span class="lnr">727 </span>                    next = i;
+<span class="lnr">728 </span>            }
+<span class="lnr">729 </span>        q = next;
+<span class="lnr">730 </span>    }
+<span class="lnr">731 </span>    <span class="Statement">while</span> (q != first);
+<span class="lnr">732 </span>}
+<span class="lnr">733 </span><span class="Comment">// выпуклая оболочка - алгоритм Грехема</span>
+<span class="lnr">734 </span>point first;
+<span class="lnr">735 </span><span class="Type">class</span> less_of_ccw
+<span class="lnr">736 </span>{
+<span class="lnr">737 </span><span class="Statement">public</span> :
+<span class="lnr">738 </span>    <span class="Type">bool</span> <span class="Statement">operator</span> () (point a, point b)
+<span class="lnr">739 </span>    {
+<span class="lnr">740 </span>        <span class="Statement">if</span> (a.i == first.i) <span class="Statement">return</span> <span class="Boolean">true</span>;
+<span class="lnr">741 </span>        <span class="Statement">if</span> (b.i == first.i) <span class="Statement">return</span> <span class="Boolean">false</span>;
+<span class="lnr">742 </span>        <span class="Statement">if</span> (ccw (first, a, b)) <span class="Statement">return</span> <span class="Boolean">true</span>;
+<span class="lnr">743 </span>        <span class="Statement">if</span> (ccw (first, b, a)) <span class="Statement">return</span> <span class="Boolean">false</span>;
+<span class="lnr">744 </span>        <span class="Statement">return</span> dist (first, a) &gt; dist (first, b);
+<span class="lnr">745 </span>    }
+<span class="lnr">746 </span>};
+<span class="lnr">747 </span><span class="Type">void</span> hull_graham (vector &lt; point &gt; p, vector &lt; <span class="Type">int</span> &gt; &amp;ip)
+<span class="lnr">748 </span>{
+<span class="lnr">749 </span>    <span class="Type">int</span> n = p.size();
+<span class="lnr">750 </span>    <span class="Type">int</span> i;
+<span class="lnr">751 </span>    <span class="Statement">for</span> (i = <span class="Number">0</span>; i &lt; n; ++ i)
+<span class="lnr">752 </span>        p[i].i = i;
+<span class="lnr">753 </span>    <span class="Comment">// ищем самую нижнюю из самых левых точек - первая точка</span>
+<span class="lnr">754 </span>    first = p[<span class="Number">0</span>];
+<span class="lnr">755 </span>    <span class="Statement">for</span> (i = <span class="Number">1</span>; i &lt; n; ++ i)
+<span class="lnr">756 </span>        <span class="Statement">if</span> (first.x &gt; p[i].x || (first.x == p[i].x &amp;&amp; first.y &gt; p[i].y))
+<span class="lnr">757 </span>            first = p[i];
+<span class="lnr">758 </span>
+<span class="lnr">759 </span>    <span class="Comment">// сортируем точки по по углу относительно первой точки</span>
+<span class="lnr">760 </span>    sort (p.begin (), p.end (), less_of_ccw ());
+<span class="lnr">761 </span>    <span class="Comment">// первая точка оболочки</span>
+<span class="lnr">762 </span>    ip.push_back (<span class="Number">0</span>);
+<span class="lnr">763 </span>    <span class="Comment">// ищем вторую точку оболочки</span>
+<span class="lnr">764 </span>    <span class="Statement">for</span> (i = <span class="Number">1</span>; i &lt; n &amp;&amp; abs (area_triangle (p[<span class="Number">0</span>], p[<span class="Number">1</span>], p[i])) &lt;= eps; ++ i);
+<span class="lnr">765 </span>    ip.push_back (<span class="Number">1</span>);
+<span class="lnr">766 </span>
+<span class="lnr">767 </span>    <span class="Comment">// последовательно добавляем точки в оболочку</span>
+<span class="lnr">768 </span>    <span class="Type">int</span> top = <span class="Number">1</span>; <span class="Comment">// индекс последней точки в оболочке</span>
+<span class="lnr">769 </span>    <span class="Statement">while</span> (i &lt; n)
+<span class="lnr">770 </span>    {
+<span class="lnr">771 </span>        <span class="Comment">// если угол больше pi то извлекаем последнюю точку из оболочки</span>
+<span class="lnr">772 </span>        <span class="Statement">if</span> (! ccw (p[ip[top - <span class="Number">1</span>]], p[ip[top]], p[i]))
+<span class="lnr">773 </span>        {
+<span class="lnr">774 </span>            -- top;
+<span class="lnr">775 </span>            ip.pop_back ();
+<span class="lnr">776 </span>        }
+<span class="lnr">777 </span>        <span class="Comment">// иначе добавляем точку в оболочку</span>
+<span class="lnr">778 </span>        <span class="Statement">else</span>
+<span class="lnr">779 </span>        {
+<span class="lnr">780 </span>            ++ top;
+<span class="lnr">781 </span>            ip.push_back (i);
+<span class="lnr">782 </span>            ++ i;
+<span class="lnr">783 </span>        }
+<span class="lnr">784 </span>    }
+<span class="lnr">785 </span>    <span class="Statement">for</span> (i = <span class="Number">0</span>; i &lt; ip.size(); ++ i)
+<span class="lnr">786 </span>        ip[i] = p[ip[i]].i;
+<span class="lnr">787 </span>}
+<span class="lnr">788 </span><span class="Comment">// минимальная окружность, покрывающая множество точек</span>
+<span class="lnr">789 </span>circle min_described_circle (vector &lt; point &gt; p)
+<span class="lnr">790 </span>{
+<span class="lnr">791 </span>    <span class="Type">int</span> n = p.size ();
+<span class="lnr">792 </span>    <span class="Type">int</span> i, j, k;
+<span class="lnr">793 </span>    circle c = circle (<span class="Number">0</span>, <span class="Number">0</span>, <span class="Float">1e9</span>);
+<span class="lnr">794 </span>    <span class="Statement">for</span> (i = <span class="Number">0</span>; i &lt; n; ++ i)
+<span class="lnr">795 </span>        <span class="Statement">for</span> (j = i + <span class="Number">1</span>; j &lt; n; ++ j)
+<span class="lnr">796 </span>            <span class="Statement">for</span> (k = j + <span class="Number">1</span>; k &lt; n; ++ k)
+<span class="lnr">797 </span>            {
+<span class="lnr">798 </span>                circle t = min_circle_for_three_point (p[i], p[j], p[k]);
+<span class="lnr">799 </span>                <span class="Type">int</span> u;
+<span class="lnr">800 </span>                <span class="Statement">for</span> (u = <span class="Number">0</span>; u &lt; n; ++ u)
+<span class="lnr">801 </span>                    <span class="Statement">if</span> (point_in_circle (p[u], t) == <span class="Number">2</span>) <span class="Statement">break</span>;
+<span class="lnr">802 </span>                <span class="Statement">if</span> (u &gt;= n &amp;&amp; t.r &lt; c.r)
+<span class="lnr">803 </span>                    c = t;
+<span class="lnr">804 </span>            }
+<span class="lnr">805 </span>    <span class="Statement">return</span> c;
+<span class="lnr">806 </span>}
+<span class="lnr">807 </span><span class="Comment">// расположение многоугольника отосительно прямой</span>
+<span class="lnr">808 </span><span class="Comment">//        1 - находится с положительной стороны</span>
+<span class="lnr">809 </span><span class="Comment">//        - 1 - находится с отрицательной стороны</span>
+<span class="lnr">810 </span><span class="Comment">//        0 - прямая пересекает одну из сторон многоугольника (сторону а не вершину)</span>
+<span class="lnr">811 </span><span class="Type">int</span> polygon_for_line (vector &lt; point &gt; p, line l)
+<span class="lnr">812 </span>{
+<span class="lnr">813 </span>    <span class="Type">int</span> i, j;
+<span class="lnr">814 </span>    <span class="Type">int</span> s = - <span class="Number">2</span>; <span class="Comment">// знак</span>
+<span class="lnr">815 </span>    <span class="Statement">for</span> (i = <span class="Number">0</span>; i &lt; p.size(); ++ i)
+<span class="lnr">816 </span>    {
+<span class="lnr">817 </span>        <span class="Type">int</span> t = point_in_line (l, p[i]); <span class="Comment">// положение вершины относительно прямой</span>
+<span class="lnr">818 </span>        <span class="Statement">if</span> (t != <span class="Number">0</span>)        <span class="Comment">// если точка не принадлежить прямой</span>
+<span class="lnr">819 </span>            <span class="Statement">if</span> (s != - <span class="Number">2</span>)     <span class="Comment">// если s мы вычислили</span>
+<span class="lnr">820 </span>                <span class="Statement">if</span> (t != s)        <span class="Comment">// если знаки различны, то прямая пересекает сторону многоугольника</span>
+<span class="lnr">821 </span>                    <span class="Statement">return</span> <span class="Number">0</span>;
+<span class="lnr">822 </span>                <span class="Statement">else</span>
+<span class="lnr">823 </span>                {}
+<span class="lnr">824 </span>            <span class="Statement">else</span>
+<span class="lnr">825 </span>                s = t; <span class="Comment">// если s мы ещё не вычислили, присваиваем ему вычисленное значение</span>
+<span class="lnr">826 </span>    }
+<span class="lnr">827 </span>    <span class="Statement">if</span> (s == - <span class="Number">2</span>) <span class="Statement">return</span> <span class="Number">0</span>;
+<span class="lnr">828 </span>    <span class="Statement">return</span> s;
+<span class="lnr">829 </span>}
+<span class="lnr">830 </span>
+<span class="lnr">831 </span><span class="Comment">// разрезание многоугольника по диагонали</span>
+<span class="lnr">832 </span><span class="Type">void</span> cut_polygon_for_edge (vector &lt; point &gt; p, <span class="Type">int</span> i1, <span class="Type">int</span> i2, vector &lt; point &gt; &amp;p1, vector &lt; point &gt; &amp;p2)
+<span class="lnr">833 </span>{
+<span class="lnr">834 </span>    <span class="Type">int</span> i;
+<span class="lnr">835 </span>    <span class="Type">int</span> n = p.size();
+<span class="lnr">836 </span>
+<span class="lnr">837 </span>    <span class="Statement">for</span> (i = i1; i != (i2 + <span class="Number">1</span>) % n; i = (i + <span class="Number">1</span>) % n)
+<span class="lnr">838 </span>        p1.push_back (p[i]);
+<span class="lnr">839 </span>
+<span class="lnr">840 </span>    <span class="Statement">for</span> (i = i2; i != (i1 + <span class="Number">1</span>) % n; i = (i + <span class="Number">1</span>) % n)
+<span class="lnr">841 </span>        p2.push_back (p[i]);
+<span class="lnr">842 </span>}
+<span class="lnr">843 </span><span class="Comment">// разрезание выпуклого многоугольника по прямой</span>
+<span class="lnr">844 </span><span class="Comment">//        функция возвращает два многоугольника</span>
+<span class="lnr">845 </span><span class="Comment">//        первый многоугольник лежит с положительной стороны от прямой</span>
+<span class="lnr">846 </span><span class="Comment">//        второй - с отрицательной</span>
+<span class="lnr">847 </span><span class="Type">void</span> cut_convex_for_line (vector &lt; point &gt; p, line l, vector &lt; point &gt; &amp;v1, vector &lt; point &gt; &amp;v2, point &amp;p1, point &amp;p2)
+<span class="lnr">848 </span>{
+<span class="lnr">849 </span>    <span class="Type">int</span> n = p.size();
+<span class="lnr">850 </span>    <span class="Type">int</span> i, j;
+<span class="lnr">851 </span>
+<span class="lnr">852 </span>    <span class="Comment">// находим точки пересечение прямой с многоугольником и вставляем их в многоугольник</span>
+<span class="lnr">853 </span>    <span class="Type">int</span> c = <span class="Number">0</span>; <span class="Comment">// счётчик пересечений многоугольника с прямой</span>
+<span class="lnr">854 </span>    list &lt; point &gt; s (p.begin(), p.end()); <span class="Comment">// представляем многоугольник как список вершин</span>
+<span class="lnr">855 </span>    list &lt; point &gt; :: iterator it, jt; <span class="Comment">// итераторы обходы</span>
+<span class="lnr">856 </span>    list &lt; point &gt; :: iterator i1, i2; <span class="Comment">// итераторы вставленных точек</span>
+<span class="lnr">857 </span>
+<span class="lnr">858 </span>    <span class="Statement">for</span> (it = s.begin(); it != s.end(); ++ it)
+<span class="lnr">859 </span>    {
+<span class="lnr">860 </span>        jt = it;
+<span class="lnr">861 </span>        ++ jt;
+<span class="lnr">862 </span>        <span class="Statement">if</span> (jt == s.end()) jt = s.begin();
+<span class="lnr">863 </span>
+<span class="lnr">864 </span>        <span class="Comment">// пересекаем прямую со стороной</span>
+<span class="lnr">865 </span>        point t;
+<span class="lnr">866 </span>        <span class="Type">int</span> flag = cross_segment_line (*it, *jt, l, t);
+<span class="lnr">867 </span>        <span class="Comment">// если прямая проходит по стороне</span>
+<span class="lnr">868 </span>        <span class="Statement">if</span> (flag == <span class="Number">2</span>)
+<span class="lnr">869 </span>        {
+<span class="lnr">870 </span>            <span class="Statement">if</span> (polygon_for_line (p, l) &gt; <span class="Number">0</span>)    v1 = p;
+<span class="lnr">871 </span>            <span class="Statement">else</span>    v2 = p;
+<span class="lnr">872 </span>            <span class="Statement">return</span>;
+<span class="lnr">873 </span>        }
+<span class="lnr">874 </span>        <span class="Comment">// если прямая и сторона не пересекаются</span>
+<span class="lnr">875 </span>        <span class="Statement">if</span> (flag == <span class="Number">0</span>) <span class="Statement">continue</span>;
+<span class="lnr">876 </span>
+<span class="lnr">877 </span>        <span class="Comment">// если прямая проходит через вершину многоугольника</span>
+<span class="lnr">878 </span>        <span class="Statement">if</span> (abs (t.x - (*it).x) &lt;= eps &amp;&amp; abs (t.y - (*it).y) &lt;= eps)
+<span class="lnr">879 </span>        {
+<span class="lnr">880 </span>            <span class="Statement">if</span> (c == <span class="Number">0</span>) i1 = it;
+<span class="lnr">881 </span>            <span class="Statement">else</span> i2 = it;
+<span class="lnr">882 </span>            ++ c;
+<span class="lnr">883 </span>            <span class="Statement">continue</span>;
+<span class="lnr">884 </span>        }
+<span class="lnr">885 </span>        <span class="Statement">if</span> (abs (t.x - (*jt).x) &lt;= eps &amp;&amp; abs (t.y - (*jt).y) &lt;= eps) <span class="Statement">continue</span>;
+<span class="lnr">886 </span>
+<span class="lnr">887 </span>        <span class="Comment">// иначе прямая пересекает сторону, вставляем точку пересечения в многоугольник</span>
+<span class="lnr">888 </span>        ++ it;
+<span class="lnr">889 </span>        it = s.insert (it, t);
+<span class="lnr">890 </span>
+<span class="lnr">891 </span>        <span class="Comment">// увеличиваем счётчик пересечений многоугольника с прямой</span>
+<span class="lnr">892 </span>        <span class="Statement">if</span> (c == <span class="Number">0</span>) i1 = it;
+<span class="lnr">893 </span>        <span class="Statement">else</span> i2 = it;
+<span class="lnr">894 </span>        ++ c;
+<span class="lnr">895 </span>    }
+<span class="lnr">896 </span>
+<span class="lnr">897 </span>    <span class="Comment">// если прямая не пересекает многоугольник</span>
+<span class="lnr">898 </span>    <span class="Statement">if</span> (c != <span class="Number">2</span>)
+<span class="lnr">899 </span>    {
+<span class="lnr">900 </span>        <span class="Statement">if</span> (polygon_for_line (p, l) &gt; <span class="Number">0</span>)    v1 = p;
+<span class="lnr">901 </span>        <span class="Statement">else</span>    v2 = p;
+<span class="lnr">902 </span>        <span class="Statement">return</span>;
+<span class="lnr">903 </span>    }
+<span class="lnr">904 </span>
+<span class="lnr">905 </span>    <span class="Comment">// представляем многоугольник массивом точек</span>
+<span class="lnr">906 </span>    n = s.size ();
+<span class="lnr">907 </span>    vector &lt; point &gt; all (s.begin(), s.end());
+<span class="lnr">908 </span>    <span class="Type">int</span> j1, j2;
+<span class="lnr">909 </span>    <span class="Statement">for</span> (it = s.begin(), i = <span class="Number">0</span>; it != s.end(); ++ i, ++ it)
+<span class="lnr">910 </span>    {
+<span class="lnr">911 </span>        <span class="Statement">if</span> (it == i1) j1 = i;
+<span class="lnr">912 </span>        <span class="Statement">if</span> (it == i2) j2 = i;
+<span class="lnr">913 </span>    }
+<span class="lnr">914 </span>
+<span class="lnr">915 </span>    <span class="Comment">// режем многоугольник</span>
+<span class="lnr">916 </span>    p1 = all[j1];
+<span class="lnr">917 </span>    p2 = all[j2];
+<span class="lnr">918 </span>    cut_polygon_for_edge (all, j1, j2, v1, v2);
+<span class="lnr">919 </span>
+<span class="lnr">920 </span>    <span class="Comment">// если многоугольники имеют не то расположение которое нам требуется - меняем их местами</span>
+<span class="lnr">921 </span>    <span class="Statement">if</span> (polygon_for_line (v1, l) &lt; <span class="Number">0</span>)
+<span class="lnr">922 </span>        swap (v1, v2);
+<span class="lnr">923 </span>}
+<span class="lnr">924 </span>
+<span class="lnr">925 </span><span class="Comment">// разрезание выпуклого многоугольника в отношении площадей m:n</span>
+<span class="lnr">926 </span>point part_convex (vector &lt; point &gt; v, <span class="Type">double</span> m, <span class="Type">double</span> n)
+<span class="lnr">927 </span>{
+<span class="lnr">928 </span>    <span class="Type">double</span> area = abs (area_polygon (v)) / (m + n) * m;
+<span class="lnr">929 </span>    <span class="Type">double</span> a = <span class="Number">0</span>;
+<span class="lnr">930 </span>    <span class="Type">int</span> i;
+<span class="lnr">931 </span>    <span class="Statement">for</span> (i = <span class="Number">1</span>; i &lt; v.size () - <span class="Number">1</span>; ++ i)
+<span class="lnr">932 </span>    {
+<span class="lnr">933 </span>        <span class="Type">double</span> s = abs (area_triangle (v[<span class="Number">0</span>], v[i], v[i + <span class="Number">1</span>]));
+<span class="lnr">934 </span>        <span class="Statement">if</span> (a + s &lt;= area)
+<span class="lnr">935 </span>            a += s;
+<span class="lnr">936 </span>        <span class="Statement">else</span> <span class="Statement">break</span>;
+<span class="lnr">937 </span>    }
+<span class="lnr">938 </span>    <span class="Statement">if</span> (abs (a - area) &lt;= eps) <span class="Statement">return</span> v[i];
+<span class="lnr">939 </span>    <span class="Statement">return</span> part_segment (v[i], v[i + <span class="Number">1</span>], area - a,
+<span class="lnr">940 </span>                        abs (area_triangle (v[<span class="Number">0</span>], v[i], v[i + <span class="Number">1</span>]) - area + a));
+<span class="lnr">941 </span>}
+<span class="lnr">942 </span><span class="Comment">// разрезание выпуклого многоугольника на k равных частей</span>
+<span class="lnr">943 </span><span class="Type">void</span> npart_convex (vector &lt; point &gt; v, <span class="Type">int</span> k, vector &lt; point &gt; &amp;s)
+<span class="lnr">944 </span>{
+<span class="lnr">945 </span>    <span class="Type">double</span> area = abs (area_polygon (v));
+<span class="lnr">946 </span>    <span class="Type">double</span> a = area / (<span class="Type">double</span>) k;
+<span class="lnr">947 </span>    <span class="Type">int</span> i;
+<span class="lnr">948 </span>    <span class="Statement">for</span> (i = <span class="Number">1</span>; i &lt; k; ++ i)
+<span class="lnr">949 </span>        s.push_back (part_convex (v, a * i, area - a * i));
+<span class="lnr">950 </span>}
+<span class="lnr">951 </span><span class="Comment">// ваша программа :-)</span>
+<span class="lnr">952 </span><span class="Type">int</span> main()
+<span class="lnr">953 </span>{
+<span class="lnr">954 </span>    <span class="Statement">return</span> <span class="Number">0</span>;
+<span class="lnr">955 </span>}
+</pre>
+</body>
+</html>

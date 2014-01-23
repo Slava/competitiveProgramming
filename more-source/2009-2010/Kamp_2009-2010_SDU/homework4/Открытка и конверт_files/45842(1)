@@ -1,0 +1,41 @@
+var y5_sLinkHead = 'http://an.yandex.ru/count/FysjIvPmVF840000Zh2XyRW4XP8n2vQeCIbiaRNLspGCau8AU0C0';
+var y5_iDirectCounter = 0;
+var y5_iDirectAdsCounter = 0;
+
+function yandex_direct_print() {
+ if (window.y5_isTransform)
+  y5_getYandexDirect();
+}
+
+function y5_getYandexDirect() {
+ var aAds = [  ['<div class="ad-link"><a href="http://an.yandex.ru/count/FysjIpowNRq40000Zh2XyRW4XP8n2vK2cm5kGoi1YAdCxGY9aUj3c8qKdQnZV0IMg34fR9AcgP0BYgp1a0UHjTNRD0oFj4f9pmYVkFJNk0MJWWgPCukXEd0rGeoGSGAWa742Vme0" target="_blank">Ёкономим на строительстве</a></div><div>и ремонте дома. —оветы, фото, примеры.</div> <span class="url">www.ekonomdom.com</span>','=xqG7sPK2cm5kGucHwqEOZHIIfgcG2vsiOtm4ZxHAISy8dxZqrxW5cJEWa742GNe5'] ];
+ var aLinkHow = ['<a target="_blank" href="http://an.yandex.ru/count/FysjInj79wa40000Zh2XyRW4XP8n2vK2cmHhK2i1CeYkheG5bgWnAMoQZ-sIfe9s2OgYwXW6aRNLspGCau8AYwTZeob2UGS0">ƒать объ€вление</a>','=r4kimvK2cmHhK3AQZ-sIfe9s2K5u0W00'];
+ var aLinkAll = [];
+ var sLinkDirectText = '<em>я</em>ндекс.ƒирект';
+ var sLinkDirectUrl = 'http://direct.yandex.ru/?partner';
+ var aDomainList = ['acmp.ru'];
+
+ y5_iDirectCounter++;
+ y5_showYandexDirect(aAds, sLinkDirectText, sLinkDirectUrl, aLinkHow, aLinkAll, aDomainList);
+}
+
+function y5_getYandexMarket() {}
+
+function y5_defAdFormat() {
+ var aFormats = ['direct', 'market', 'media', 'compatibility'];
+ var sAdFormat = (window.yandex_ad_format) ? y5_checkEntry(yandex_ad_format.toString(), aFormats) : aFormats[0];
+ switch (sAdFormat) {
+  case aFormats[0]:
+   y5_getYandexDirect();
+   break;
+  case aFormats[1]:
+   y5_getYandexMarket();
+   break;
+  case aFormats[2]:
+   y5_getMediaBanner();
+   break;
+  case aFormats[3]:
+   break;
+ }
+}
+y5_defAdFormat();

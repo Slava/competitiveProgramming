@@ -1,0 +1,3 @@
+http://www.spoj.pl/problems/HIST2/
+http://www.spoj.pl/problems/CERC07B/
+http://www.spoj.pl/problems/QTREE2/

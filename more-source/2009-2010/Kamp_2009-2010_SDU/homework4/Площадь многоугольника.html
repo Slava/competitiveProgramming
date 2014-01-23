@@ -1,0 +1,287 @@
+
+<!-- saved from url=(0037)http://acmp.ru/?main=task&id_task=370 -->
+<HTML><!-- Design & Programming by Sergey Belyaev, @2006-2010 E-mail: bsn@mail.ru --><HEAD><META http-equiv="Content-Type" content="text/html; charset=windows-1251">
+  <TITLE>Площадь многоугольника</TITLE>
+  
+  <META name="description" content="Многоугольник на плоскости задан целочисленными координатами своих N вершин в декартовой системе координат. Требуется найти площадь многоугольника. Стороны многоугольника не соприкасаются (за исключением соседних - в вершинах) и не пересекаются. Входные данные В первой строке входного фа">
+  <META name="keywords" content="программирование, задачи по программированию, разбор задач, проверяющая система, acm, асм">
+  <META name="yandex-verification" content="469bed0cc8ac30a3">
+  <META name="yandex-verification" content="4750e2c69b4e997c"> 
+  <LINK rel="icon" href="http://acmp.ru/images/favicon.ico" type="image/x-icon">
+  <LINK rel="shortcut icon" href="http://acmp.ru/images/favicon.ico" type="image/x-icon"> 
+  <LINK rel="stylesheet" type="text/css" href="./Площадь многоугольника_files/acmp_style.css">
+  <SCRIPT>var now = new Date(2010,3-1,4,5,20,58)</SCRIPT>
+
+  <SCRIPT src="./Площадь многоугольника_files/olimp.js" language="JavaScript"></SCRIPT>
+
+</HEAD><BODY onload="LoadImages();ShowTime()" class="nomargin"><SCRIPT type="text/javascript" src="./Площадь многоугольника_files/45842"></SCRIPT>
+  <TABLE width="100%" cellpadding="0" cellspacing="0" style="margin-top: 2" border="0"> 
+	<TBODY><TR height="20"><TD colspan="5">
+	  <TABLE width="100%" cellpadding="0" cellspacing="0" border="0"> 
+
+        <TBODY><TR height="40">
+	      <TD colspan="2">
+		    <TABLE cellpadding="0" cellspacing="0"><TBODY><TR>
+		      <TD valign="top">&nbsp;<A href="http://acmp.ru/"><IMG src="./Площадь многоугольника_files/emblem.gif" width="42" height="34" alt="Школа программиста" border="0"></A></TD>
+		      <TD><A href="http://acmp.ru/"><IMG src="./Площадь многоугольника_files/title.gif" width="354" height="40" alt="Школа программиста" border="0"></A></TD>
+            </TR></TBODY></TABLE>
+		  </TD>
+		  <TD valign="top" align="right">
+		     <P id="timer" class="nomargin">Thu Mar 04 2010 05:25:21 GMT+0600 (ALMT)&nbsp;</P>
+			 
+			   <A href="http://acmp.ru/inc/remind.asp" style="font-size: 8pt">Забыли пароль?</A>
+             
+		  </TD>
+        </TR>
+
+        <TR height="5">
+		  <TD background="./Площадь многоугольника_files/3lines.gif" colspan="3">
+		</TR><TR height="20" valign="middle">
+           <TD bgcolor="#aaFFaa" width="500">&nbsp; <A href="http://acmp.ru/" class="top">[новости]</A>
+ <A href="http://acmp.ru/asp/gb.asp?id=-1" class="top">[гостевая книга]</A>
+ <A href="http://acmp.ru/asp/forum.asp" class="top">[форум]</A>
+
+ <A href="http://chat.acmp.ru/" class="top" target="_blank">[чат]</A>
+
+ <A href="http://acmp.ru/inc/register.asp" class="top">[регистрация]</A>
+
+&nbsp;
+</TD>
+           <TD bgcolor="#609E48" width="20" background="./Площадь многоугольника_files/45a.gif">
+           <TD bgcolor="#609E48" align="right"> 
+  <FORM class="nomargin" name="enter" action="http://acmp.ru/index.asp?main=enter&r=562557403647345820400563" method="post" onsubmit="return ValidLF()"> 
+    <B class="btext2">
+	  Логин: <INPUT type="text" name="lgn" value="" size="8">&nbsp;
+	  Пароль: <INPUT type="password" name="password" value="" size="8">&nbsp;
+	  <INPUT type="submit" value="Ok" class="button" style="height:17">&nbsp;
+  </B></FORM><B class="btext2">
+  <SCRIPT defer="">enter.lgn.focus()</SCRIPT> 
+</B></TD>
+		</TR>
+	  </TBODY></TABLE>
+    </TD></TR>	
+	<TR height="8"><TD colspan="5" background="./Площадь многоугольника_files/line.gif"><A href="http://acmp.ru/?main=back&showmenu=0"><IMG src="./Площадь многоугольника_files/l_arr.gif" border="0" width="15" height="7" alt="Скрыть меню"></A></TD></TR>
+	<TR><TD colspan="5">
+    <TABLE width="100%" cellspacing="0" cellpadding="0"><TBODY><TR height="100%">
+	  
+        <TD width="180" valign="top" height="100%">		<TABLE width="100%" height="100%" cellpadding="0" cellspacing="0" valign="top">
+	    <TBODY><TR height="1%"><TD>
+
+           
+		<TABLE width="100%" height="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+		  <TBODY><TR><TD colspan="5"></TR>
+          <TR height="19">
+		    <TD width="1">&nbsp;</TD>
+            <TD width="12" background="./Площадь многоугольника_files/l_menu.gif" bgcolor="#339933"><IMG src="./Площадь многоугольника_files/l_menu.gif" width="12" height="19"></TD>
+            <TD background="./Площадь многоугольника_files/s_menu.gif" width="100%" align="center" bgcolor="#88ff88" class="menu_title">ИНФОРМАЦИЯ</TD>
+            <TD width="12" background="./Площадь многоугольника_files/r_menu.gif" bgcolor="#339933"><IMG src="./Площадь многоугольника_files/r_menu.gif" width="12" height="19"></TD>
+		    <TD width="1">
+          </TR>
+          <TR valign="top" height="100%" bgcolor="#f0fff0">
+		    <TD>
+            <TD colspan="3" background="./Площадь многоугольника_files/notepad.gif" style="BORDER-BOTTOM: #306E18 1px dashed;  BORDER-left: #306E18 1px dashed;BORDER-right: #306E18 1px dashed; padding: 3" height="100%">
+<IMG src="./Площадь многоугольника_files/circle.gif" width="10" height="10"> <A href="http://acmp.ru/article.asp?id_text=7">О школе</A><BR>
+<IMG src="./Площадь многоугольника_files/circle.gif" width="10" height="10"> <A href="http://acmp.ru/asp/champ">Олимпиады</A><BR>
+<IMG src="./Площадь многоугольника_files/circle.gif" width="10" height="10"> <A href="http://acmp.ru/asp/albom/">Фотоальбом</A><BR>
+<IMG src="./Площадь многоугольника_files/circle.gif" width="10" height="10"> <A href="http://acmp.ru/article.asp?id_text=121">Архив</A><BR>
+</TD><TD></TR><TR height="2"><TD colspan="5"></TR></TBODY></TABLE>
+  
+
+	    </TD></TR><TR height="1%"><TD>
+
+		   
+		<TABLE width="100%" height="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+		  <TBODY><TR><TD colspan="5"></TR>
+          <TR height="19">
+		    <TD width="1">&nbsp;</TD>
+            <TD width="12" background="./Площадь многоугольника_files/l_menu.gif" bgcolor="#339933"><IMG src="./Площадь многоугольника_files/l_menu.gif" width="12" height="19"></TD>
+            <TD background="./Площадь многоугольника_files/s_menu.gif" width="100%" align="center" bgcolor="#88ff88" class="menu_title">ЗАДАЧНИК</TD>
+            <TD width="12" background="./Площадь многоугольника_files/r_menu.gif" bgcolor="#339933"><IMG src="./Площадь многоугольника_files/r_menu.gif" width="12" height="19"></TD>
+		    <TD width="1">
+          </TR>
+          <TR valign="top" height="100%" bgcolor="#f0fff0">
+		    <TD>
+            <TD colspan="3" background="./Площадь многоугольника_files/notepad.gif" style="BORDER-BOTTOM: #306E18 1px dashed;  BORDER-left: #306E18 1px dashed;BORDER-right: #306E18 1px dashed; padding: 3" height="100%">
+<IMG src="./Площадь многоугольника_files/circle.gif" width="10" height="10"> <A href="http://acmp.ru/?main=tasks">Архив задач</A><BR>
+<IMG src="./Площадь многоугольника_files/circle.gif" width="10" height="10"> <A href="http://acmp.ru/?main=status">Состояние системы</A><BR>
+<IMG src="./Площадь многоугольника_files/circle.gif" width="10" height="10"> <A href="http://acmp.ru/article.asp?id_text=120">Работа в системе</A><BR>
+<IMG src="./Площадь многоугольника_files/circle.gif" width="10" height="10"> <A href="http://acmp.ru/?main=rating">Рейтинг</A><BR>
+<IMG src="./Площадь многоугольника_files/circle.gif" width="10" height="10"> <A href="http://acmp.ru/article.asp?id_text=197">Разбор задач</A><BR>
+<IMG src="./Площадь многоугольника_files/circle.gif" width="10" height="10"> <A href="http://acmp.ru/article.asp?id_text=1339">Добавить задачу</A><BR>
+           </TD><TD></TR><TR height="2"><TD colspan="5"></TR></TBODY></TABLE>
+  
+
+	    </TD></TR><TR height="1%"><TD>
+
+		   
+		<TABLE width="100%" height="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+		  <TBODY><TR><TD colspan="5"></TR>
+          <TR height="19">
+		    <TD width="1">&nbsp;</TD>
+            <TD width="12" background="./Площадь многоугольника_files/l_menu.gif" bgcolor="#339933"><IMG src="./Площадь многоугольника_files/l_menu.gif" width="12" height="19"></TD>
+            <TD background="./Площадь многоугольника_files/s_menu.gif" width="100%" align="center" bgcolor="#88ff88" class="menu_title">МЕТОДИЧКА</TD>
+            <TD width="12" background="./Площадь многоугольника_files/r_menu.gif" bgcolor="#339933"><IMG src="./Площадь многоугольника_files/r_menu.gif" width="12" height="19"></TD>
+		    <TD width="1">
+          </TR>
+          <TR valign="top" height="100%" bgcolor="#f0fff0">
+		    <TD>
+            <TD colspan="3" background="./Площадь многоугольника_files/notepad.gif" style="BORDER-BOTTOM: #306E18 1px dashed;  BORDER-left: #306E18 1px dashed;BORDER-right: #306E18 1px dashed; padding: 3" height="100%">
+<IMG src="./Площадь многоугольника_files/circle.gif" width="10" height="10"> <A href="http://acmp.ru/article.asp?id_text=118">Новичкам</A><BR>
+<IMG src="./Площадь многоугольника_files/circle.gif" width="10" height="10"> <A href="http://acmp.ru/article.asp?id_text=195">Алгоритмы</A><BR>
+<IMG src="./Площадь многоугольника_files/circle.gif" width="10" height="10"> <A href="http://acmp.ru/article.asp?id_text=196">Курсы КДПиШ</A><BR>
+<IMG src="./Площадь многоугольника_files/circle.gif" width="10" height="10"> <A href="http://acmp.ru/article.asp?id_text=513">Курс олимпиадника</A><BR> 
+<IMG src="./Площадь многоугольника_files/circle.gif" width="10" height="10"> <A href="http://acmp.ru/article.asp?id_text=845">Дистрибутивы</A><BR> 
+
+<IMG src="./Площадь многоугольника_files/circle.gif" width="10" height="10"> <A href="http://acmp.ru/article.asp?id_text=2">Ссылки</A><BR>
+           </TD><TD></TR><TR height="2"><TD colspan="5"></TR></TBODY></TABLE>
+  
+
+	    </TD></TR><TR height="100%"><TD>
+
+		   
+		<TABLE width="100%" height="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+		  <TBODY><TR><TD colspan="5"></TR>
+          <TR height="19">
+		    <TD width="1">&nbsp;</TD>
+            <TD width="12" background="./Площадь многоугольника_files/l_menu.gif" bgcolor="#339933"><IMG src="./Площадь многоугольника_files/l_menu.gif" width="12" height="19"></TD>
+            <TD background="./Площадь многоугольника_files/s_menu.gif" width="100%" align="center" bgcolor="#88ff88" class="menu_title">СТАТИСТИКА</TD>
+            <TD width="12" background="./Площадь многоугольника_files/r_menu.gif" bgcolor="#339933"><IMG src="./Площадь многоугольника_files/r_menu.gif" width="12" height="19"></TD>
+		    <TD width="1">
+          </TR>
+          <TR valign="top" height="100%" bgcolor="#f0fff0">
+		    <TD>
+            <TD colspan="3" background="./Площадь многоугольника_files/notepad.gif" style="BORDER-BOTTOM: #306E18 1px dashed;  BORDER-left: #306E18 1px dashed;BORDER-right: #306E18 1px dashed; padding: 3" height="100%">
+<TABLE align="center">
+  <TBODY><TR><TD><IMG src="./Площадь многоугольника_files/count" width="88" height="31" alt="HotLog" onclick="window.open(&#39;http://hotlog.ru/viewstat?id=426099&amp;begin_day=2&amp;begin_month=2&amp;begin_year=2010&amp;end_day=4&amp;end_month=3&amp;end_year=2010&amp;basic_hits=1&amp;basic_hosts=1&amp;section=daily&#39;)" style="cursor:hand"></TD>
+  <TD><IMG src="./Площадь многоугольника_files/cycounter" width="88" height="31" alt="Индекс Цитирования" onclick="window.open(&#39;http://www.yandex.ru/cy?base=0&amp;host=acm.dvpion.ru&#39;)" style="cursor:hand"></TD>
+</TR>
+<TR>
+  <TD>
+    <IMG src="./Площадь многоугольника_files/saved_resource" width="88" height="31" border="0" alt="Красноярский рейтинг сайтов на Krasland.ru" onclick="window.open(&#39;http://cnt.krasland.ru/from?id=13105&#39;)" style="cursor:hand">
+  </TD>
+  <TD>
+    <IMG src="./Площадь многоугольника_files/goldensite.gif" width="88" height="31" alt="Конкурс сайтов &quot;Золотой сайт&quot;" onclick="window.open(&#39;http://goldensite.ru&#39;)" style="cursor:hand">
+  </TD>
+</TR>
+<TR>
+  <TD colspan="2" align="center"><BR><IMG alt="GISMETEO.RU: погода в г. Красноярск" src="./Площадь многоугольника_files/29574-9.GIF" border="0" width="120" height="60" onclick="window.open(&#39;http://www.gismeteo.ru/towns/29574.htm&#39;)" style="cursor:hand"></TD>
+</TR></TBODY></TABLE>
+
+<BR>&nbsp;
+
+           </TD><TD></TR><TR height="2"><TD colspan="5"></TR></TBODY></TABLE>
+  
+
+		</TD></TR>
+ 	    </TBODY></TABLE>
+
+</TD>
+      
+	  <TD>  	
+<!--END OF HEADER-->
+		<TABLE width="100%" height="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+		  <TBODY><TR><TD colspan="5"></TR>
+          <TR height="19">
+		    <TD width="1">&nbsp;</TD>
+            <TD width="12" background="./Площадь многоугольника_files/l_menu.gif" bgcolor="#339933"><IMG src="./Площадь многоугольника_files/l_menu.gif" width="12" height="19"></TD>
+            <TD background="./Площадь многоугольника_files/s_menu.gif" width="100%" align="center" bgcolor="#88ff88" class="menu_title">ЗАДАЧА №370</TD>
+            <TD width="12" background="./Площадь многоугольника_files/r_menu.gif" bgcolor="#339933"><IMG src="./Площадь многоугольника_files/r_menu.gif" width="12" height="19"></TD>
+		    <TD width="1">
+          </TR>
+          <TR valign="top" height="100%" bgcolor="#f0fff0">
+		    <TD>
+            <TD colspan="3" background="./Площадь многоугольника_files/notepad2.gif" style="BORDER-BOTTOM: #306E18 1px dashed;  BORDER-left: #306E18 1px dashed;BORDER-right: #306E18 1px dashed; padding: 3" height="100%">
+<H1>Площадь многоугольника</H1>
+<CENTER><I>(Время: 1 сек. Память: 16 Мб Сложность: 48%)</I></CENTER>
+<P class="text">
+Многоугольник на плоскости задан целочисленными координатами своих N вершин в декартовой системе координат. Требуется найти площадь многоугольника. Стороны многоугольника не соприкасаются (за исключением соседних - в вершинах) и не пересекаются.
+</P>
+
+<H2>Входные данные</H2>
+
+<P class="text">
+В первой строке входного файла INPUT.TXT находится число N. В следующих N строках находятся пары чисел (Xi,Yi) - координаты точек. Если соединить точки в данном порядке, а также первую и последнюю точки, получится заданный многоугольник. (3 &lt;= N &lt;= 50 000,  -20 000 &lt;= Xi,Yi &lt;= 20 000)
+</P>
+
+<H2>Выходные данные</H2>
+
+<P class="text">
+В выходной файл OUTPUT.TXT выведите одно число - площадь многоугольника. Его следует округлить до ближайшего числа с одной цифрой после запятой.
+</P>
+
+<H2>Примеры</H2>
+
+<TABLE class="main" cellpadding="2" cellspacing="1">
+<TBODY><TR><TH width="30">№</TH><TH>INPUT.TXT</TH><TH>OUTPUT.TXT</TH></TR>
+<TR class="white2"><TD align="center">1</TD><TD valign="top">4<BR>
+5 0<BR>
+0 5<BR>
+-5 0<BR>
+0 -5
+</TD><TD valign="top">50.0</TD></TR>
+<TR class="white2"><TD align="center">2</TD><TD valign="top">4<BR>
+0 4<BR>
+0 0<BR>
+3 0<BR>
+1 1
+</TD><TD valign="top">3.5</TD></TR>
+</TBODY></TABLE>
+
+<BR>
+
+<H4><I>Для отправки решения задачи необходимо <A href="http://acmp.ru/inc/register.asp">зарегистрироваться</A> и авторизоваться!</I></H4>
+
+<H4>
+
+  <A href="http://acmp.ru/asp/gb.asp?id=370">[Обсуждение]</A>
+
+  <A href="http://acmp.ru/index.asp?main=status&id_t=370">[Все попытки]</A>
+  <A href="http://acmp.ru/index.asp?main=bstatus&id_t=370">[Лучшие попытки]</A>
+
+</H4>
+
+<!-- Яндекс.Директ -->
+<SCRIPT type="text/javascript"><!--
+yandex_partner_id = 45842;
+yandex_site_bg_color = 'FFFFFF';
+yandex_site_charset = 'windows-1251';
+yandex_ad_format = 'direct';
+yandex_font_size = 0.8;
+yandex_direct_type = 'horizontal';
+yandex_direct_border_type = 'ad';
+yandex_direct_limit = 4;
+yandex_direct_header_bg_color = '';
+yandex_direct_bg_color = '';
+yandex_direct_border_color = '';
+yandex_direct_title_color = '004000';
+yandex_direct_url_color = '004000';
+yandex_direct_all_color = '004000';
+yandex_direct_text_color = '000000';
+yandex_direct_hover_color = 'ff0000';
+document.write('<sc'+'ript type="text/javascript" src="http://an.yandex.ru/resource/context.js?rnd=' + Math.round(Math.random() * 100000) + '"></sc'+'ript>');
+//--></SCRIPT><SCRIPT type="text/javascript" src="./Площадь многоугольника_files/context.js"></SCRIPT><LINK rel="stylesheet" type="text/css" href="./Площадь многоугольника_files/context_r426.css"><SCRIPT type="text/javascript" src="./Площадь многоугольника_files/context_static_r440.js"></SCRIPT><SCRIPT type="text/javascript" src="./Площадь многоугольника_files/45842(1)"></SCRIPT><STYLE type="text/css">#y5_direct1 .y5_ad div a {color: #004000 !important;} #y5_direct1 .y5_ad div {color: #000000 !important;} #y5_direct1 .y5_ad span, #y5_direct1 .y5_ad span a {color: #004000 !important;} #y5_direct1 .y5_all a, #y5_direct1 .y5_how a {color: #004000 !important;} #y5_direct1 .y5_ad div a:hover {color: #ff0000 !important;} #y5_direct1 .y5_icon em {background-color: #004000 !important;} #y5_direct1 {font-size: 0.8em !important;} </STYLE><DIV id="y5_direct1" class="y5 y5_nf y5_horizontal snap_noshots"><DIV class="y5_bb y5_ads1 y5_exp2v0"><DIV class="y5_h"><DIV class="y5_ya"><SPAN class="y5_black"><EM>Я</EM>ндекс</SPAN><SPAN class="y5_black y5_bg"><A class="snap_noshots" href="http://direct.yandex.ru/?partner" target="_blank">Директ</A></SPAN></DIV><DIV class="y5_how"><SPAN><A target="_blank" href="http://an.yandex.ru/count/7fMBTBQNEwy40000ZhkGyRW4XP8n2vK2cmHhK2i1CeYkheG5bgZHkeQQcmK4agQ2TWcAekeO1f6rqVi439E22ekdOwCfGde7">Дать объявление</A></SPAN></DIV></DIV><TABLE class="y5_ads"><TBODY><TR><TD class="y5_item"><DIV class="y5_ad"><DIV class="ad-link"><A class="snap_noshot" href="http://an.yandex.ru/count/7fMBTCWLmz440000ZhkGyRW4XP8n2vK2cm5kGoi1YAdCxGY9aUj3c8qKdQnZV0IMgD6wXfAcgP0BYgp1a0UHjT7x10oFj4f9pmYVkFJNk0MJWWgPCukXEd0rGeoGSGAWa742Vme0?test-tag=84197762" target="_blank">Экономим на строительстве</A></DIV><DIV>и ремонте дома. Советы, фото, примеры.</DIV> <SPAN class="url">www.ekonomdom.com</SPAN></DIV></TD></TR></TBODY></TABLE></DIV></DIV>
+</TD><TD></TR><TR height="2"><TD colspan="5"></TR></TBODY></TABLE>
+  <!--START FOOTER-->
+	  </TD>
+	  <TD width="1">&nbsp;</TD>
+	</TR></TBODY></TABLE>
+	</TD></TR>
+	<TR height="8"><TD colspan="5" background="./Площадь многоугольника_files/line.gif"></TR>
+  </TBODY></TABLE>
+<CENTER>
+<P style="margin:3">
+  <I>Красноярский краевой Дворец пионеров и школьников, (c)2006 - 2010, ICQ:  &nbsp;<IMG src="./Площадь многоугольника_files/online"> 151483</I>
+</P>
+<BR>
+<P style="margin:3">
+
+<BR>
+<!--16185425356-->		  
+</P>
+
+<IFRAME src="./Площадь многоугольника_files/icq_update.html" width="100" height="20" marginwidth="0" marginheight="0" frameborder="0" scrolling="no"></IFRAME>
+
+</CENTER>
+
+
+</BODY></HTML>
