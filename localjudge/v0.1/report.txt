@@ -1,0 +1,52 @@
+
+testing Ким Вячеслав problem b : 
+file is cpp and was compiled
+WA!
+1 WA
+WA!
+2 WA
+WA!
+3 WA
+WA!
+4 WA
+WA!
+5 WA
+WA!
+6 WA
+./test.sh: line 46: 22883 Segmentation fault      ./a
+WA!
+7 WA
+WA!
+8 WA
+./test.sh: line 46: 22892 Segmentation fault      ./a
+WA!
+9 WA
+./test.sh: line 46: 22896 Segmentation fault      ./a
+WA!
+10 WA
+./test.sh: line 46: 22900 Segmentation fault      ./a
+WA!
+11 WA
+./test.sh: line 46: 22904 Segmentation fault      ./a
+WA!
+12 WA
+./test.sh: line 46: 22908 Segmentation fault      ./a
+WA!
+13 WA
+./test.sh: line 46: 22912 Segmentation fault      ./a
+WA!
+14 WA
+WA!
+15 WA
+./test.sh: line 46: 22920 Segmentation fault      ./a
+WA!
+16 WA
+WA!
+17 WA
+./test.sh: line 46: 22928 Segmentation fault      ./a
+WA!
+18 WA
+WA!
+19 WA
+WA!
+20 WA

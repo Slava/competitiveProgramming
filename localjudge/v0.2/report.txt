@@ -1,0 +1,67 @@
+tl = 4 seconds
+ml = 65536 Mb
+use stdin/stdout = 0
+
+
+testing on problem A : 
+/tmp/ccMNZ6oG.o: In function `main':
+A.cpp:(.text+0xf4): warning: the `gets' function is dangerous and should not be used.
+file is cpp and was compiled
+OK!
+OK
+1 AC
+OK!
+OK
+2 AC
+OK!
+OK
+3 AC
+OK!
+OK
+4 AC
+OK!
+OK
+5 AC
+OK!
+OK
+6 AC
+OK!
+OK
+7 AC
+OK!
+OK
+8 AC
+OK!
+OK
+9 AC
+OK!
+OK
+10 AC
+OK!
+OK
+11 AC
+OK!
+OK
+12 AC
+Not optimal
+13 WA
+Not optimal
+14 WA
+Not optimal
+15 WA
+OK!
+OK
+16 AC
+OK!
+OK
+17 AC
+OK!
+OK
+18 AC
+Not optimal
+19 WA
+Not optimal
+20 WA
+
+
+
